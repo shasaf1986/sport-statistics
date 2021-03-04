@@ -1,26 +1,54 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { MatchList, MatchListField } from './components/MatchList';
+import { Container } from '@material-ui/core';
+import json from './CFEC2.json';
 
-function App() {
+const fields: MatchListField[] = [{
+  key: 'date',
+  title: 'Date',
+  type: 'date'
+}, {
+  key: 'home-team',
+  title: 'Home team'
+}, {
+  key: 'away-team',
+  title: 'Away team'
+}, {
+  key: 'q1',
+  title: 'Q1 score'
+},
+{
+  key: 'q2',
+  title: 'Q2 score'
+},
+{
+  key: 'q3',
+  title: 'Q3 score'
+},
+{
+  key: 'q4',
+  title: 'Q4 score'
+},
+{
+  key: 'home-fouls',
+  title: 'Home fouls'
+},
+{
+  key: 'away-fouls',
+  title: 'Away fouls'
+}, {
+  key: 'MVP',
+  title: 'MVP'
+}
+];
+
+
+export default function BasicTable() {
+  console.log(json);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container fixed>
+      <MatchList fields={fields} entries={json['matches']} />
+    </Container>
   );
 }
-
-export default App;

@@ -1,12 +1,29 @@
-import React from 'react';
+import React, { FC } from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from 'react-router-dom';
+import { createMuiTheme, CssBaseline, StylesProvider, ThemeProvider } from '@material-ui/core';
+import App from './App';
+
+const theme = createMuiTheme();
+
+const Root: FC = () => (
+  <BrowserRouter>
+    <StylesProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <StyledThemeProvider theme={theme}>
+          <App />
+        </StyledThemeProvider>
+      </ThemeProvider>
+    </StylesProvider>
+  </BrowserRouter>
+);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Root />
   </React.StrictMode>,
   document.getElementById('root')
 );
