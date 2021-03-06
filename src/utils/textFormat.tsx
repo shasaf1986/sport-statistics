@@ -1,4 +1,4 @@
-import moment from "moment";
+import moment from 'moment';
 
 export const getFormattedText = (value: any, type?: 'string' | 'date') => {
   switch (type) {

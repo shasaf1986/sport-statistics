@@ -3,7 +3,12 @@ import ReactDOM from 'react-dom';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import { createMuiTheme, CssBaseline, StylesProvider, ThemeProvider } from '@material-ui/core';
+import {
+  createMuiTheme,
+  CssBaseline,
+  StylesProvider,
+  ThemeProvider,
+} from '@material-ui/core';
 import App from './App';
 
 const theme = createMuiTheme();
