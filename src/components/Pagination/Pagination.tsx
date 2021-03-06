@@ -8,20 +8,25 @@ import React, { FC } from 'react';
 interface PaginationProps {
   onNext: () => void;
   onPrev: () => void;
-  // hasNext: boolean;
-  // hasPrev: boolean;
+  hasNext: boolean;
+  hasPrev: boolean;
 }
 
-export const Pagination: FC<PaginationProps> = ({ onNext, onPrev }) => (
+export const Pagination: FC<PaginationProps> = ({
+  onNext,
+  onPrev,
+  hasNext,
+  hasPrev,
+}) => (
   <div
     style={{
       textAlign: 'right',
     }}
   >
-    <IconButton onClick={onPrev}>
+    <IconButton disabled={!hasPrev} onClick={onPrev}>
       <NavigateBeforeIcon />
     </IconButton>
-    <IconButton onClick={onNext}>
+    <IconButton disabled={!hasNext} onClick={onNext}>
       <NavigateNextIcon />
     </IconButton>
   </div>

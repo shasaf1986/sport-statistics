@@ -19,6 +19,8 @@ export interface DataGridProps {
   onNext: () => void;
   onPrev: () => void;
   isLoading: boolean;
+  hasNext: boolean;
+  hasPrev: boolean;
 }
 
 export const DataGrid: FC<DataGridProps> = ({
@@ -27,6 +29,8 @@ export const DataGrid: FC<DataGridProps> = ({
   onNext,
   onPrev,
   isLoading,
+  hasNext,
+  hasPrev,
 }) => (
   <div>
     <TableContainer>
@@ -61,6 +65,11 @@ export const DataGrid: FC<DataGridProps> = ({
         </TableBody>
       </Table>
     </TableContainer>
-    <Pagination onNext={onNext} onPrev={onPrev} />
+    <Pagination
+      hasNext={hasNext}
+      hasPrev={hasPrev}
+      onNext={onNext}
+      onPrev={onPrev}
+    />
   </div>
 );

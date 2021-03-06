@@ -1,12 +1,25 @@
 import { useEffect, useState } from 'react';
 
+export interface UsePaginationFetchResult<T> {
+  list: T[];
+  hasMore: boolean;
+}
+
+export type UsePaginationFetchFn<T> = (
+  page: number
+) => Promise<UsePaginationFetchResult<T>>;
+
 export const usePagination = <T extends unknown>(
-  fetchFn: (currentPage: number) => Promise<T[]>
+  fetchFn: UsePaginationFetchFn<T>
 ) => {
   const [aggregateList, setAggregateList] = useState<T[][]>([]);
+  const [hasMore, setHasMore] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const currentList: T[] | undefined = aggregateList[currentPage];
   const [isLoading, setIsLoading] = useState(true);
+  const hasNext =
+    !isLoading && (currentPage + 1 < aggregateList.length || hasMore);
+  const hasPrev = !isLoading && currentPage > 0;
 
   const triggerChangePage = (newPage: number) => {
     if (!aggregateList[newPage]) {
@@ -27,16 +40,17 @@ export const usePagination = <T extends unknown>(
     }
     let isMounted = true;
 
-    fetchFn(currentPage).then((newList) => {
+    fetchFn(currentPage).then((result) => {
       if (!isMounted) {
         return;
       }
       setAggregateList((prev) => {
         const newAggregateList = [...prev];
-        newAggregateList[currentPage] = newList;
+        newAggregateList[currentPage] = result.list;
 
         return newAggregateList;
       });
+      setHasMore(result.hasMore);
       setIsLoading(false);
     });
 
@@ -50,5 +64,7 @@ export const usePagination = <T extends unknown>(
     currentList,
     triggerNextPage,
     triggerPrevPage,
+    hasNext,
+    hasPrev,
   };
 };
