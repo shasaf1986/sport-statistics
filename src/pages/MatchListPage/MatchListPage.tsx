@@ -1,9 +1,14 @@
 import React, { FC } from 'react';
-import { DataGrid, DataGridHeaderProps } from '../../components/DataGrid';
+import {
+  DataGrid,
+  DataGridHeader,
+  DataGridRow,
+} from '../../components/DataGrid';
 import { getFormattedText } from '../../utils/textFormat';
 import { fieldConfig } from './fieldsConfig';
 import mockData from '../../CFEC2.json';
 import { usePagination } from '../../hooks/usePagination';
+import { useHistory } from 'react-router-dom';
 
 const delay = () =>
   new Promise<void>((resolve) => {
@@ -23,7 +28,8 @@ const load = async (start: number, end: number) => {
 const PER_PAGE = 10;
 
 export const MatchListPage: FC = () => {
-  const headers: DataGridHeaderProps[] = fieldConfig.map(({ title }) => ({
+  const history = useHistory();
+  const headers: DataGridHeader[] = fieldConfig.map(({ title }) => ({
     node: title,
   }));
   const {
@@ -33,7 +39,7 @@ export const MatchListPage: FC = () => {
     triggerPrevPage,
     hasNext,
     hasPrev,
-  } = usePagination(async (page) => {
+  } = usePagination<DataGridRow>(async (page) => {
     const { result, hasMore } = await load(
       page * PER_PAGE,
       (page + 1) * PER_PAGE
@@ -51,8 +57,13 @@ export const MatchListPage: FC = () => {
     };
   });
 
+  const handleClickRow = (id: string | number) => {
+    history.push(`/match-details/${id}`, { isModal: true });
+  };
+
   return (
     <DataGrid
+      onClickRow={handleClickRow}
       hasNext={hasNext}
       hasPrev={hasPrev}
       isLoading={isLoading}

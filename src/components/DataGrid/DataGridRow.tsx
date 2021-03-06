@@ -1,12 +1,12 @@
 import { Checkbox, TableCell, TableRow } from '@material-ui/core';
-import React, { FC, ReactNode, useState } from 'react';
+import React, { FC, useState } from 'react';
+import { DataGridRow as DataGridRowType } from './types';
 
-export interface DataGridRowProps {
-  id: string | number;
-  cells: ReactNode[];
+export interface DataGridRowProps extends DataGridRowType {
+  onClick: (id: string | number) => void;
 }
 
-export const DataGridRow: FC<DataGridRowProps> = ({ cells }) => {
+export const DataGridRow: FC<DataGridRowProps> = ({ cells, id, onClick }) => {
   const [isHovering, setIsHovering] = useState(false);
 
   const handleMouseEnter = () => {
@@ -15,9 +15,13 @@ export const DataGridRow: FC<DataGridRowProps> = ({ cells }) => {
   const handleMouseLeave = () => {
     setIsHovering(false);
   };
+  const handleClick = () => {
+    onClick(id);
+  };
 
   return (
     <TableRow
+      onClick={handleClick}
       selected={isHovering}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -29,7 +33,7 @@ export const DataGridRow: FC<DataGridRowProps> = ({ cells }) => {
       <TableCell
         style={{
           // opacity: isHovering ? 1 : 0,
-          visibility: isHovering ? undefined : 'hidden',
+          // visibility: isHovering ? undefined : 'hidden',
           // borderColor: isHovering ? undefined : 'transparent',
           paddingRight: 0,
           width: 1,
