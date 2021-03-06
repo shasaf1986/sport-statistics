@@ -7,6 +7,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { DataGridRowProps, DataGridRow } from './DataGridRow';
 import { Pagination } from '../Pagination';
+import { DataGridSekeltonRow } from './DataGridSkeletonRow';
 
 export interface DataGridHeaderProps {
   node: ReactNode;
@@ -17,6 +18,7 @@ export interface DataGridProps {
   rows?: DataGridRowProps[];
   onNext: () => void;
   onPrev: () => void;
+  isLoading: boolean;
 }
 
 export const DataGrid: FC<DataGridProps> = ({
@@ -24,12 +26,17 @@ export const DataGrid: FC<DataGridProps> = ({
   headers,
   onNext,
   onPrev,
+  isLoading,
 }) => (
   <div>
     <TableContainer>
       <Table size="small">
         <TableHead>
-          <TableRow>
+          <TableRow
+            style={{
+              whiteSpace: 'nowrap',
+            }}
+          >
             <TableCell
               style={{
                 width: 1,
@@ -45,9 +52,12 @@ export const DataGrid: FC<DataGridProps> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <DataGridRow key={row.id} {...row} />
-          ))}
+          {isLoading &&
+            Array.from({ length: 10 }, (_, index) => (
+              <DataGridSekeltonRow cellsCount={headers.length} key={index} />
+            ))}
+          {!isLoading &&
+            rows.map((row) => <DataGridRow key={row.id} {...row} />)}
         </TableBody>
       </Table>
     </TableContainer>
