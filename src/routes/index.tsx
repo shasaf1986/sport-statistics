@@ -1,8 +1,8 @@
-import { Drawer } from '@material-ui/core';
-import React, { FC, useEffect, useRef, useState } from 'react';
-import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
+import React, { FC, useRef } from 'react';
+import { Switch, Route, useLocation } from 'react-router-dom';
 import { MatchListPage } from '../pages/MatchListPage';
 import { MatchDetailsPage } from '../pages/MatchDetailsPage';
+import { Drawer } from '../components/Drawer/Drawer';
 
 export const Routes: FC = () => {
   const location = useLocation<any>();
@@ -13,16 +13,6 @@ export const Routes: FC = () => {
     prevLocationRef.current = location;
   }
 
-  const history = useHistory();
-
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    if (isModal) {
-      setIsOpen(true);
-    }
-  }, [isModal]);
-
   return (
     <>
       <Switch location={isModal ? prevLocationRef.current : location}>
@@ -30,19 +20,13 @@ export const Routes: FC = () => {
           <MatchListPage />
         </Route>
       </Switch>
-      <Route exact path="/match-details/:id">
-        <Drawer
-          open={isOpen}
-          anchor="right"
-          onClose={() => {
-            setIsOpen(false);
-            history.goBack();
-            console.log('here');
-          }}
-        >
-          <MatchDetailsPage />
-        </Drawer>
-      </Route>
+      {isModal && (
+        <Route exact path="/match-details/:id">
+          <Drawer>
+            <MatchDetailsPage />
+          </Drawer>
+        </Route>
+      )}
     </>
   );
 };
