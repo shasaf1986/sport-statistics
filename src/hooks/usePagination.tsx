@@ -1,52 +1,81 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 export interface UsePaginationFetchResult<T> {
-  list: T[];
+  partialList: T[];
   hasMore: boolean;
 }
 
-export type UsePaginationFetchFn<T> = (
-  page: number
-) => Promise<UsePaginationFetchResult<T>>;
+export interface UsePaginationFetchArgs {
+  start: number;
+  end: number;
+}
 
-export const usePagination = <T extends unknown>(
-  fetchFn: UsePaginationFetchFn<T>
-) => {
-  const [aggregateList, setAggregateList] = useState<T[][]>([]);
-  const [hasMore, setHasMore] = useState(false);
+export type UsePaginationFetchFn<T> = (args: {
+  start: number;
+  end: number;
+}) => Promise<UsePaginationFetchResult<T>>;
+
+export interface UserPaginationOptions<T> {
+  fetchFn: UsePaginationFetchFn<T>;
+  perPage?: number;
+}
+
+export const usePagination = <T extends unknown>({
+  fetchFn,
+  perPage = 10,
+}: UserPaginationOptions<T>) => {
+  const [sessionId, setSessionId] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
-  const currentList: T[] | undefined = aggregateList[currentPage];
+  const [aggregatedList, setAggregatedList] = useState<T[][]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const hasNext =
-    !isLoading && (currentPage + 1 < aggregateList.length || hasMore);
-  const hasPrev = !isLoading && currentPage > 0;
+  const [hasMore, setHasMore] = useState(false);
 
-  const triggerChangePage = (newPage: number) => {
-    if (!aggregateList[newPage]) {
-      setIsLoading(true);
-    }
-    setCurrentPage(newPage);
-  };
-  const triggerNextPage = () => {
-    triggerChangePage(currentPage + 1);
-  };
-  const triggerPrevPage = () => {
-    triggerChangePage(currentPage - 1);
-  };
+  const totalPages = aggregatedList.length;
+  const hasNext = !isLoading && (currentPage + 1 < totalPages || hasMore);
+  const hasPrev = !isLoading && currentPage > 0;
+  const currentList = aggregatedList[currentPage];
+
+  const goToPage = useCallback(
+    (destPage: number) => {
+      if (!aggregatedList[destPage]) {
+        setIsLoading(true);
+      }
+      setCurrentPage(destPage);
+    },
+    [aggregatedList]
+  );
+
+  const goToNextPage = useCallback(() => {
+    goToPage(currentPage + 1);
+  }, [currentPage, goToPage]);
+
+  const goToPrevPage = useCallback(() => {
+    goToPage(currentPage - 1);
+  }, [currentPage, goToPage]);
+
+  const reset = useCallback(() => {
+    setIsLoading(true);
+    setHasMore(false);
+    setCurrentPage(0);
+    setAggregatedList([]);
+    setSessionId((prev) => prev + 1);
+  }, []);
 
   useEffect(() => {
     if (!isLoading) {
       return;
     }
     let isMounted = true;
+    const start = currentPage * perPage;
+    const end = (currentPage + 1) * perPage;
 
-    fetchFn(currentPage).then((result) => {
+    fetchFn({ start, end }).then((result) => {
       if (!isMounted) {
         return;
       }
-      setAggregateList((prev) => {
+      setAggregatedList((prev) => {
         const newAggregateList = [...prev];
-        newAggregateList[currentPage] = result.list;
+        newAggregateList[currentPage] = result.partialList;
 
         return newAggregateList;
       });
@@ -57,14 +86,26 @@ export const usePagination = <T extends unknown>(
     return () => {
       isMounted = false;
     };
-  }, [currentPage, isLoading]);
+  }, [currentPage, fetchFn, isLoading, perPage, sessionId]);
 
-  return {
-    isLoading,
-    currentList,
-    triggerNextPage,
-    triggerPrevPage,
-    hasNext,
-    hasPrev,
-  };
+  return useMemo(
+    () => ({
+      hasNext,
+      hasPrev,
+      goToNextPage,
+      goToPrevPage,
+      reset,
+      currentList: currentList || [],
+      isLoading,
+    }),
+    [
+      goToNextPage,
+      goToPrevPage,
+      hasNext,
+      hasPrev,
+      reset,
+      currentList,
+      isLoading,
+    ]
+  );
 };

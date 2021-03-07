@@ -3,6 +3,11 @@ import { DataGridRow } from './DataGridRow';
 import { Pagination } from '../Pagination';
 import { DataGridSekeltonRow } from './DataGridSkeletonRow';
 import { DataGridHeader, DataGridRow as DataGridRowType } from './types';
+import {
+  UsePaginationFetchResult,
+  UsePaginationFetchArgs,
+  usePagination,
+} from '../../hooks/usePagination';
 import { CheckboxCell, CheckboxState } from './CheckboxCell';
 import {
   Table,
@@ -13,42 +18,47 @@ import {
   TableRow,
 } from '@material-ui/core';
 
+export interface DataGridFetchFnArgs extends UsePaginationFetchArgs {}
+export interface DataGridFetchFnResult
+  extends UsePaginationFetchResult<DataGridRowType> {}
+
+export type DataGridFetchFn = (
+  args: DataGridFetchFnArgs
+) => Promise<DataGridFetchFnResult>;
 export interface DataGridProps {
   headers: DataGridHeader[];
-  rows?: DataGridRowType[];
-  onNext: () => void;
-  onPrev: () => void;
-  isLoading: boolean;
-  hasNext: boolean;
-  hasPrev: boolean;
+  fetchFn: DataGridFetchFn;
   onClickRow: (id: string | number) => void;
 }
 
 export const DataGrid: FC<DataGridProps> = ({
-  rows = [],
   headers,
-  onNext,
-  onPrev,
-  isLoading,
-  hasNext,
-  hasPrev,
   onClickRow,
+  fetchFn,
 }) => {
+  const {
+    currentList,
+    hasNext,
+    goToNextPage,
+    goToPrevPage,
+    hasPrev,
+    isLoading,
+  } = usePagination({ fetchFn });
   const [selectedRowIds, setSelectedRowIds] = useState<Record<string, boolean>>(
     {}
   );
   const selectedRowCount = useMemo(
     () =>
-      rows.reduce((acc, { id }) => {
+      currentList.reduce((acc, { id }) => {
         if (selectedRowIds[id]) {
           return acc + 1;
         }
         return acc;
       }, 0),
-    [selectedRowIds, rows]
+    [selectedRowIds, currentList]
   );
 
-  const areAllRowsSelected = selectedRowCount === rows.length;
+  const areAllRowsSelected = selectedRowCount === currentList.length;
   const checkboxState: CheckboxState =
     selectedRowCount === 0
       ? 'off'
@@ -68,7 +78,7 @@ export const DataGrid: FC<DataGridProps> = ({
   const handleAggregateCheckboxClick = () => {
     const shouldCheckAll = checkboxState === 'off';
     setSelectedRowIds((prev) =>
-      rows.reduce(
+      currentList.reduce(
         (acc, row) => ({
           ...acc,
           [row.id]: shouldCheckAll,
@@ -77,6 +87,7 @@ export const DataGrid: FC<DataGridProps> = ({
       )
     );
   };
+  // usePagination({});
 
   return (
     <div>
@@ -103,7 +114,7 @@ export const DataGrid: FC<DataGridProps> = ({
                 <DataGridSekeltonRow cellsCount={headers.length} key={index} />
               ))}
             {!isLoading &&
-              rows.map((row) => (
+              currentList.map((row) => (
                 <DataGridRow
                   isChecked={!!selectedRowIds[row.id]}
                   onCheck={() => {
@@ -122,8 +133,8 @@ export const DataGrid: FC<DataGridProps> = ({
       <Pagination
         hasNext={hasNext}
         hasPrev={hasPrev}
-        onNext={onNext}
-        onPrev={onPrev}
+        onNext={goToNextPage}
+        onPrev={goToPrevPage}
       />
     </div>
   );
