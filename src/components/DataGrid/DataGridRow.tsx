@@ -1,12 +1,20 @@
-import { Checkbox, TableCell, TableRow } from '@material-ui/core';
+import { TableCell, TableRow } from '@material-ui/core';
 import React, { FC, useState } from 'react';
+import { CheckboxCell } from './CheckboxCell';
 import { DataGridRow as DataGridRowType } from './types';
 
 export interface DataGridRowProps extends DataGridRowType {
-  onClick: (id: string | number) => void;
+  onClick: () => void;
+  onCheck: () => void;
+  isChecked: boolean;
 }
 
-export const DataGridRow: FC<DataGridRowProps> = ({ cells, id, onClick }) => {
+export const DataGridRow: FC<DataGridRowProps> = ({
+  cells,
+  onClick,
+  onCheck,
+  isChecked,
+}) => {
   const [isHovering, setIsHovering] = useState(false);
 
   const handleMouseEnter = () => {
@@ -16,7 +24,7 @@ export const DataGridRow: FC<DataGridRowProps> = ({ cells, id, onClick }) => {
     setIsHovering(false);
   };
   const handleClick = () => {
-    onClick(id);
+    onClick();
   };
 
   return (
@@ -30,23 +38,7 @@ export const DataGridRow: FC<DataGridRowProps> = ({ cells, id, onClick }) => {
         cursor: 'pointer',
       }}
     >
-      <TableCell
-        style={{
-          // opacity: isHovering ? 1 : 0,
-          // visibility: isHovering ? undefined : 'hidden',
-          // borderColor: isHovering ? undefined : 'transparent',
-          paddingRight: 0,
-          width: 1,
-        }}
-      >
-        <Checkbox
-          style={{
-            // visibility: isHovering ? undefined : 'hidden',
-            padding: 0,
-          }}
-          color="primary"
-        />
-      </TableCell>
+      <CheckboxCell onClick={onCheck} state={isChecked ? 'on' : 'off'} />
       {cells.map((text, index) => (
         <TableCell key={index}>{text}</TableCell>
       ))}
