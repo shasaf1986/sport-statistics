@@ -29,6 +29,11 @@ export const usePagination = <T extends unknown>({
   const [aggregatedList, setAggregatedList] = useState<T[][]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(false);
+  const list = useMemo(
+    () =>
+      aggregatedList.reduce((acc, partialList) => [...acc, ...partialList], []),
+    [aggregatedList]
+  );
 
   const totalPages = aggregatedList.length;
   const hasNext = !isLoading && (currentPage + 1 < totalPages || hasMore);
@@ -97,6 +102,7 @@ export const usePagination = <T extends unknown>({
       reset,
       currentList: currentList || [],
       isLoading,
+      list,
     }),
     [
       goToNextPage,
@@ -105,6 +111,7 @@ export const usePagination = <T extends unknown>({
       hasPrev,
       reset,
       currentList,
+      list,
       isLoading,
     ]
   );

@@ -1,9 +1,22 @@
 import { useCallback, useMemo, useState } from 'react';
+import { SelectionState } from '../types';
 
 interface BasicList {
   id: string | number;
 }
-type SelectionState = 'all' | 'none' | 'partial';
+
+const getSelectionState = (
+  currentLength: number,
+  totalLength: number
+): SelectionState => {
+  if (currentLength === 0) {
+    return 'unselected';
+  }
+  if (currentLength === totalLength) {
+    return 'selected';
+  }
+  return 'indeterminate';
+};
 
 export const useSelectionItems = <T extends BasicList>(
   list: T[],
@@ -15,24 +28,18 @@ export const useSelectionItems = <T extends BasicList>(
   const selectedIds = useMemo(() => Object.keys(selectedIdsMap), [
     selectedIdsMap,
   ]);
-  const state: SelectionState =
-    selectedIds.length === 0
-      ? 'none'
-      : selectedIds.length === list.length
-      ? 'all'
-      : 'partial';
-  const partialState: SelectionState = useMemo(() => {
-    const partialListSelected = partialList.filter(
-      ({ id }) => selectedIdsMap[id] === true
-    );
-    return partialListSelected.length === 0
-      ? 'none'
-      : partialList.length === partialListSelected.length
-      ? 'all'
-      : 'none';
-  }, [partialList, selectedIdsMap]);
+  const partialSelectedIds = useMemo(
+    () => partialList.filter(({ id }) => selectedIdsMap[id] === true),
+    [partialList, selectedIdsMap]
+  );
 
-  const toggleId = useCallback((id: string) => {
+  const state = getSelectionState(selectedIds.length, list.length);
+  const partialState = getSelectionState(
+    partialSelectedIds.length,
+    partialList.length
+  );
+
+  const toggle = useCallback((id: string | number) => {
     setSelectedIdsMap((prev) => {
       const newPrev = { ...prev };
       if (newPrev[id]) {
@@ -44,43 +51,66 @@ export const useSelectionItems = <T extends BasicList>(
     });
   }, []);
 
-  const toggleSelectAll = () => {
-    if (state === 'none') {
-      setSelectedIdsMap(
-        list.reduce((acc, { id }) => {
-          acc[id] = true;
-          return acc;
-        }, {} as any)
-      );
-    } else {
-      setSelectedIdsMap(() => ({}));
-    }
-  };
-  const toggleSelectAllPartial = () => {
-    const ids = partialList.map(({ id }) => id);
-    const shouldAdd = partialState === 'none';
-    setSelectedIdsMap((prev) =>
-      ids.reduce(
-        (acc, id) => {
-          if (shouldAdd) {
-            acc[id] = true;
-          } else {
-            delete acc[id];
-          }
-          return acc;
-        },
-        { ...prev }
-      )
-    );
-  };
+  const togglePartialList = useCallback(() => {
+    const shouldAdd = partialState === 'unselected';
 
-  return {
-    state,
-    toggleId,
-    selectedIds,
-    selectedIdsMap,
-    toggleSelectAll,
-    partialState,
-    toggleSelectAllPartial,
-  };
+    setSelectedIdsMap((prev) => {
+      const newPrev = { ...prev };
+      partialList.forEach(({ id }) => {
+        if (shouldAdd) {
+          newPrev[id] = true;
+        } else {
+          delete newPrev[id];
+        }
+      });
+      return newPrev;
+    });
+  }, [partialState, partialList]);
+
+  const toggleList = useCallback(() => {
+    const shouldAdd = state === 'unselected';
+
+    setSelectedIdsMap((prev) => {
+      if (shouldAdd) {
+        const newPrev = { ...prev };
+        list.forEach(({ id }) => {
+          newPrev[id] = true;
+        });
+        return newPrev;
+      }
+      return {};
+    });
+  }, [list, state]);
+
+  const reset = useCallback(() => {
+    setSelectedIdsMap({});
+  }, []);
+
+  const getIsSelected = useCallback(
+    (id: string | number) => selectedIdsMap[id] === true,
+    [selectedIdsMap]
+  );
+
+  return useMemo(
+    () => ({
+      selectedIds,
+      toggleList,
+      togglePartialList,
+      toggle,
+      state,
+      partialState,
+      reset,
+      getIsSelected,
+    }),
+    [
+      getIsSelected,
+      partialState,
+      reset,
+      selectedIds,
+      state,
+      toggle,
+      toggleList,
+      togglePartialList,
+    ]
+  );
 };

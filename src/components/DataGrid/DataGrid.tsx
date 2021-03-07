@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC } from 'react';
 import { DataGridRow } from './DataGridRow';
 import { Pagination } from '../Pagination';
 import { DataGridSekeltonRow } from './DataGridSkeletonRow';
@@ -8,7 +8,7 @@ import {
   UsePaginationFetchArgs,
   usePagination,
 } from '../../hooks/usePagination';
-import { CheckboxCell, CheckboxState } from './CheckboxCell';
+import { CheckboxCell } from './CheckboxCell';
 import {
   Table,
   TableBody,
@@ -17,6 +17,7 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
+import { useSelectionItems } from '../../hooks/useSelection';
 
 export interface DataGridFetchFnArgs extends UsePaginationFetchArgs {}
 export interface DataGridFetchFnResult
@@ -43,51 +44,14 @@ export const DataGrid: FC<DataGridProps> = ({
     goToPrevPage,
     hasPrev,
     isLoading,
+    list,
   } = usePagination({ fetchFn });
-  const [selectedRowIds, setSelectedRowIds] = useState<Record<string, boolean>>(
-    {}
-  );
-  const selectedRowCount = useMemo(
-    () =>
-      currentList.reduce((acc, { id }) => {
-        if (selectedRowIds[id]) {
-          return acc + 1;
-        }
-        return acc;
-      }, 0),
-    [selectedRowIds, currentList]
-  );
-
-  const areAllRowsSelected = selectedRowCount === currentList.length;
-  const checkboxState: CheckboxState =
-    selectedRowCount === 0
-      ? 'off'
-      : areAllRowsSelected
-      ? 'on'
-      : 'indeterminate';
-
-  const handleSelectRow = (id: string | number) => {
-    onClickRow(id);
-  };
-  const handleCheckRow = (id: string | number) => {
-    setSelectedRowIds((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
-  const handleAggregateCheckboxClick = () => {
-    const shouldCheckAll = checkboxState === 'off';
-    setSelectedRowIds((prev) =>
-      currentList.reduce(
-        (acc, row) => ({
-          ...acc,
-          [row.id]: shouldCheckAll,
-        }),
-        { ...prev }
-      )
-    );
-  };
-  // usePagination({});
+  const {
+    getIsSelected,
+    toggle,
+    partialState,
+    togglePartialList,
+  } = useSelectionItems(list, currentList);
 
   return (
     <div>
@@ -99,10 +63,7 @@ export const DataGrid: FC<DataGridProps> = ({
                 whiteSpace: 'nowrap',
               }}
             >
-              <CheckboxCell
-                state={checkboxState}
-                onClick={handleAggregateCheckboxClick}
-              />
+              <CheckboxCell state={partialState} onClick={togglePartialList} />
               {headers.map(({ node }, index) => (
                 <TableCell key={index}>{node}</TableCell>
               ))}
@@ -116,12 +77,12 @@ export const DataGrid: FC<DataGridProps> = ({
             {!isLoading &&
               currentList.map((row) => (
                 <DataGridRow
-                  isChecked={!!selectedRowIds[row.id]}
+                  isChecked={getIsSelected(row.id)}
                   onCheck={() => {
-                    handleCheckRow(row.id);
+                    toggle(row.id);
                   }}
                   onClick={() => {
-                    handleSelectRow(row.id);
+                    onClickRow(row.id);
                   }}
                   key={row.id}
                   {...row}

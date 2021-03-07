@@ -5,6 +5,7 @@ import {
 import { IndeterminateCheckBox as IndeterminateCheckBoxIcon } from '@material-ui/icons';
 import styled from 'styled-components';
 import React, { FC } from 'react';
+import { SelectionState } from '../../types';
 
 interface ContainerProps {
   isVisible: boolean;
@@ -24,16 +25,14 @@ const Checkbox = styled(MuiCheckbox)({
   padding: 0,
 });
 
-export type CheckboxState = 'on' | 'off' | 'indeterminate';
-
 export interface CheckboxCellProps {
-  state?: CheckboxState;
+  state?: SelectionState;
   onClick?: () => void;
   isVisible?: boolean;
 }
 
 export const CheckboxCell: FC<CheckboxCellProps> = ({
-  state = 'off',
+  state = 'unselected',
   onClick,
   isVisible = true,
 }) => (
@@ -48,7 +47,7 @@ export const CheckboxCell: FC<CheckboxCellProps> = ({
   >
     <Checkbox
       color="primary"
-      checked={state === 'on'}
+      checked={state === 'selected'}
       indeterminateIcon={<IndeterminateCheckBoxIcon color="primary" />}
       indeterminate={state === 'indeterminate'}
     />

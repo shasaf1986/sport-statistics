@@ -38,7 +38,10 @@ export const DataGridRow: FC<DataGridRowProps> = ({
         cursor: 'pointer',
       }}
     >
-      <CheckboxCell onClick={onCheck} state={isChecked ? 'on' : 'off'} />
+      <CheckboxCell
+        onClick={onCheck}
+        state={isChecked ? 'selected' : 'unselected'}
+      />
       {cells.map((text, index) => (
         <TableCell key={index}>{text}</TableCell>
       ))}
