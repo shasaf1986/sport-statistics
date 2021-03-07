@@ -42,11 +42,9 @@ const fetchFn: DataGridFetchFn = async ({ start, end }) => {
 
 export const MatchListPage: FC = () => {
   const history = useHistory();
-  const handleClickRow = (id: string | number) => {
-    history.push(`/match-details/${id}`, { isModal: true });
+  const handleShow = (id: number[]) => {
+    history.push(`/match-details/${id.join('-')}`, { isModal: true });
   };
 
-  return (
-    <DataGrid fetchFn={fetchFn} onClickRow={handleClickRow} headers={headers} />
-  );
+  return <DataGrid onShow={handleShow} fetchFn={fetchFn} headers={headers} />;
 };

@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 export interface DataGridRow {
-  id: string | number;
+  id: number;
   cells: ReactNode[];
 }
 

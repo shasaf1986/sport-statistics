@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { SelectionState } from '../types';
 
 interface BasicList {
-  id: string | number;
+  id: number;
 }
 
 const getSelectionState = (
@@ -39,7 +39,7 @@ export const useSelectionItems = <T extends BasicList>(
     partialList.length
   );
 
-  const toggle = useCallback((id: string | number) => {
+  const toggle = useCallback((id: number) => {
     setSelectedIdsMap((prev) => {
       const newPrev = { ...prev };
       if (newPrev[id]) {
@@ -87,7 +87,7 @@ export const useSelectionItems = <T extends BasicList>(
   }, []);
 
   const getIsSelected = useCallback(
-    (id: string | number) => selectedIdsMap[id] === true,
+    (id: number) => selectedIdsMap[id] === true,
     [selectedIdsMap]
   );
 

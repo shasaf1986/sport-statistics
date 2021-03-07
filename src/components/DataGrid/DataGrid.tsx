@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { CheckBox } from '@material-ui/icons';
+import { CheckBox, Visibility } from '@material-ui/icons';
 import { DataGridRow } from './DataGridRow';
 import { Pagination } from '../Pagination';
 import { DataGridSekeltonRow } from './DataGridSkeletonRow';
@@ -32,14 +32,10 @@ export type DataGridFetchFn = (
 export interface DataGridProps {
   headers: DataGridHeader[];
   fetchFn: DataGridFetchFn;
-  onClickRow: (id: string | number) => void;
+  onShow: (id: number[]) => void;
 }
 
-export const DataGrid: FC<DataGridProps> = ({
-  headers,
-  onClickRow,
-  fetchFn,
-}) => {
+export const DataGrid: FC<DataGridProps> = ({ headers, onShow, fetchFn }) => {
   const {
     currentList,
     hasNext,
@@ -55,7 +51,12 @@ export const DataGrid: FC<DataGridProps> = ({
     partialState,
     togglePartialList,
     toggleList,
+    selectedIds,
   } = useSelectionItems(list, currentList);
+
+  const handleShow = () => {
+    onShow(selectedIds.map((v) => +v));
+  };
 
   return (
     <div>
@@ -64,6 +65,14 @@ export const DataGrid: FC<DataGridProps> = ({
           textAlign: 'right',
         }}
       >
+        <Button
+          onClick={handleShow}
+          variant="text"
+          color="default"
+          startIcon={<Visibility />}
+        >
+          Show all
+        </Button>
         <Button
           onClick={toggleList}
           variant="text"
@@ -112,7 +121,7 @@ export const DataGrid: FC<DataGridProps> = ({
                       toggle(row.id);
                     }}
                     onClick={() => {
-                      onClickRow(row.id);
+                      onShow([row.id]);
                     }}
                     key={row.id}
                     {...row}
