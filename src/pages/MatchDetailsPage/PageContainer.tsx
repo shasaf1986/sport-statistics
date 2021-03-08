@@ -1,4 +1,4 @@
-import { Paper, Typography } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 import { FC } from 'react';
 import styled from 'styled-components';
 
@@ -9,14 +9,6 @@ const StyledPaper = styled(Paper)({
   justifyContent: 'space-between',
 });
 
-const Header = styled(Typography)({
-  textTransform: 'capitalize',
-  marginBottom: 15,
-});
-
 export const PageContainer: FC = ({ children }) => (
-  <>
-    <Header variant="h4">Match details</Header>
-    <StyledPaper>{children}</StyledPaper>
-  </>
+  <StyledPaper>{children}</StyledPaper>
 );

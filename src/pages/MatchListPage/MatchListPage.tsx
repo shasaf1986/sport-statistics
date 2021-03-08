@@ -2,10 +2,8 @@ import { FC } from 'react';
 import {
   DataGrid,
   DataGridHeader,
-  // DataGridRow,
   DataGridFetchFn,
 } from '../../components/DataGrid';
-// import { getFormattedText } from '../../utils/textFormat';
 import { fieldConfig } from './fieldsConfig';
 import mockData from '../../CFEC2.json';
 import { useHistory } from 'react-router-dom';
