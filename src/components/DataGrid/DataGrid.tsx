@@ -1,7 +1,5 @@
 import { FC, useContext } from 'react';
-import { DataGridRow } from './DataGridRow';
 import { Pagination } from '../Pagination';
-import { DataGridSekeltonRow } from './DataGridSkeletonRow';
 import { DataGridHeader, DataGridRow as DataGridRowType } from './types';
 import {
   UsePaginationFetchResult,
@@ -9,16 +7,8 @@ import {
   usePagination,
 } from '../../hooks/usePagination';
 import { SubscriptionContext } from '../../contexts/SubscriptionContext';
-import { CheckboxCell } from './CheckboxCell';
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@material-ui/core';
+import { Paper } from '@material-ui/core';
+import { Table } from './Table';
 import { Toolbar } from './Toolbar';
 import { useSelectionItems } from '../../hooks/useSelection';
 
@@ -60,8 +50,9 @@ export const DataGrid: FC<DataGridProps> = ({ headers, onShow, fetchFn }) => {
   const handleShow = () => {
     onShow(selectedIds.map((v) => +v));
   };
-  const handleShowTwo = (id: number) => {
-    onShow([id]);
+
+  const handleRowClick = (id: number) => {
+    onShow([+id]);
     subscribe('sport', id.toString());
   };
 
@@ -73,56 +64,19 @@ export const DataGrid: FC<DataGridProps> = ({ headers, onShow, fetchFn }) => {
         selectionState={state}
         selectedItemsCount={selectedItemsCount}
       />
-
       <Paper>
-        <TableContainer
-          style={{
-            userSelect: 'none',
-            height: 600,
-          }}
-        >
-          <Table size="small">
-            <TableHead>
-              <TableRow
-                style={{
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                <CheckboxCell
-                  state={partialState}
-                  onClick={togglePartialList}
-                />
-                {headers.map(({ node }, index) => (
-                  <TableCell key={index}>{node}</TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {isLoading &&
-                Array.from({ length: 10 }, (_, index) => (
-                  <DataGridSekeltonRow
-                    cellsCount={headers.length}
-                    key={index}
-                  />
-                ))}
-              {!isLoading &&
-                currentList.map((row) => (
-                  <DataGridRow
-                    isSubscribed={getIsSubscribed('sport', row.id.toString())}
-                    isChecked={getIsSelected(row.id)}
-                    onCheck={() => {
-                      toggle(row.id);
-                    }}
-                    onClick={() => {
-                      handleShowTwo(row.id);
-                    }}
-                    key={row.id}
-                    {...row}
-                  />
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <Table
+          list={currentList}
+          headers={headers}
+          isLoading={isLoading}
+          selectionState={partialState}
+          onRowCheck={toggle}
+          onAggregatedCheckboxClick={togglePartialList}
+          onRowClick={handleRowClick}
+          getIsRowChecked={(id) => getIsSelected(+id)}
+          getIsRowSelected={(id) => getIsSelected(+id)}
+          getIsRowSubscribed={(id) => getIsSubscribed('sport', id)}
+        />
         <Pagination
           hasNext={hasNext}
           hasPrev={hasPrev}
