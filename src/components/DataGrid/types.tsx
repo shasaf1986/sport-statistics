@@ -1,22 +1,10 @@
-import { ReactNode } from 'react';
-import {
-  UsePaginationFetchArgs,
-  UsePaginationFetchResult,
-} from '../../hooks/usePagination';
+import { DataType } from '../../types';
+import { UsePaginationFetchFn } from '../../hooks/usePagination';
 
-export interface DataGridRow {
-  id: number;
-  cells: ReactNode[];
-}
+export type DataGridConfig = {
+  textHeader: string;
+  key: string;
+  dataType?: DataType;
+}[];
 
-export interface DataGridHeader {
-  node: ReactNode;
-}
-
-export interface DataGridFetchFnArgs extends UsePaginationFetchArgs {}
-export interface DataGridFetchFnResult
-  extends UsePaginationFetchResult<DataGridRow> {}
-
-export type DataGridFetchFn = (
-  args: DataGridFetchFnArgs
-) => Promise<DataGridFetchFnResult>;
+export type DataGridFetchFn<T = any> = UsePaginationFetchFn<T>;

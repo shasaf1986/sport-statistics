@@ -1,26 +1,27 @@
-import { FC, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Pagination } from '../Pagination';
-import { DataGridFetchFn, DataGridHeader } from './types';
+import { DataGridConfig, DataGridFetchFn } from './types';
 import { usePagination } from '../../hooks/usePagination';
 import { SubscriptionContext } from '../../contexts/SubscriptionContext';
 import { Paper } from '@material-ui/core';
 import { Table } from './Table';
 import { Toolbar } from './Toolbar';
 import { useSelectionItems } from '../../hooks/useSelection';
+import { BaseEntity } from '../../types';
 
-export interface DataGridProps {
-  headers: DataGridHeader[];
-  fetchFn: DataGridFetchFn;
+export interface DataGridProps<T> {
+  config: DataGridConfig;
+  fetchFn: DataGridFetchFn<T>;
   onShow: (id: number[]) => void;
   subscriptionKey?: string;
 }
 
-export const DataGrid: FC<DataGridProps> = ({
-  headers,
+export const DataGrid = <T extends BaseEntity>({
   onShow,
   fetchFn,
   subscriptionKey = 'basketball',
-}) => {
+  config,
+}: DataGridProps<T>) => {
   const {
     currentList,
     hasNext,
@@ -73,7 +74,7 @@ export const DataGrid: FC<DataGridProps> = ({
         <Table
           showCheckboxes={showCheckboxes}
           list={currentList}
-          headers={headers}
+          config={config}
           isLoading={isLoading}
           selectionState={partialState}
           onRowCheck={toggle}

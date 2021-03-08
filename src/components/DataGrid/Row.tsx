@@ -1,14 +1,18 @@
 import { TableCell, TableRow } from '@material-ui/core';
-import { FC, useState } from 'react';
+import { useMemo, useState } from 'react';
 import styled from 'styled-components';
+import { BaseEntity } from '../../types';
+import { getFormattedText } from '../../utils/textFormat';
 import { CheckboxCell } from './CheckboxCell';
-import { DataGridRow as DataGridRowType } from './types';
+import { DataGridConfig } from './types';
 
 const StyledTableRow = styled(TableRow)({
   cursor: 'pointer',
 });
 
-export interface RowProps extends DataGridRowType {
+export interface RowProps<T> {
+  config: DataGridConfig;
+  data: T;
   onClick: () => void;
   onCheck: () => void;
   isChecked: boolean;
@@ -16,15 +20,25 @@ export interface RowProps extends DataGridRowType {
   showCheckbox: boolean;
 }
 
-export const Row: FC<RowProps> = ({
-  cells,
+export const Row = <T extends BaseEntity>({
   onClick,
   onCheck,
   isChecked,
   isSubscribed,
   showCheckbox,
-}) => {
+  config,
+  data,
+}: RowProps<T>) => {
   const [isHovering, setIsHovering] = useState(false);
+  const texts = useMemo(
+    () =>
+      config.map(({ key, dataType }) => {
+        const rawValue = (data as any)[key];
+        return getFormattedText(rawValue, dataType);
+      }),
+    [config, data]
+  );
+
   const handleMouseEnter = () => {
     setIsHovering(true);
   };
@@ -44,8 +58,8 @@ export const Row: FC<RowProps> = ({
         onClick={onCheck}
         state={isChecked ? 'selected' : 'unselected'}
       />
-      {cells.map((text, index) => (
-        <TableCell key={index}>{text}</TableCell>
+      {config.map((_text, index) => (
+        <TableCell key={index}>{texts[index]}</TableCell>
       ))}
     </StyledTableRow>
   );

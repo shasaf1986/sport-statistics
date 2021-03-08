@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import {
   TableContainer,
   TableHead,
@@ -10,8 +9,8 @@ import {
 import { SekeltonRow } from './SkeletonRow';
 import { Row } from './Row';
 import styled from 'styled-components';
-import { SelectionState } from '../../types';
-import { DataGridHeader, DataGridRow } from './types';
+import { BaseEntity, SelectionState } from '../../types';
+import { DataGridConfig } from './types';
 import { CheckboxCell } from './CheckboxCell';
 
 const StyledTableContainer = styled(TableContainer)({
@@ -23,11 +22,11 @@ const StyledTableHead = styled(TableHead)({
   whiteSpace: 'nowrap',
 });
 
-export interface TableProps {
+export interface TableProps<T> {
   selectionState: SelectionState;
   onAggregatedCheckboxClick: () => void;
-  headers: DataGridHeader[];
-  list: DataGridRow[];
+  config: DataGridConfig;
+  list: T[];
   isLoading: boolean;
   getIsRowSubscribed: (id: number) => boolean;
   getIsRowChecked: (id: number) => boolean;
@@ -36,10 +35,10 @@ export interface TableProps {
   showCheckboxes: boolean;
 }
 
-export const Table: FC<TableProps> = ({
+export const Table = <T extends BaseEntity>({
   selectionState,
   onAggregatedCheckboxClick,
-  headers,
+  config,
   isLoading,
   list,
   getIsRowSubscribed,
@@ -47,7 +46,7 @@ export const Table: FC<TableProps> = ({
   onRowCheck,
   onRowClick,
   showCheckboxes,
-}) => (
+}: TableProps<T>) => (
   <StyledTableContainer>
     <MuiTable size="small">
       <StyledTableHead>
@@ -58,8 +57,8 @@ export const Table: FC<TableProps> = ({
             state={selectionState}
             onClick={onAggregatedCheckboxClick}
           />
-          {headers.map(({ node }, index) => (
-            <TableCell key={index}>{node}</TableCell>
+          {config.map(({ textHeader, key }) => (
+            <TableCell key={key}>{textHeader}</TableCell>
           ))}
         </TableRow>
       </StyledTableHead>
@@ -68,13 +67,15 @@ export const Table: FC<TableProps> = ({
           Array.from({ length: 10 }, (_, index) => (
             <SekeltonRow
               showChecbox={showCheckboxes}
-              cellsCount={headers.length}
+              cellsCount={config.length}
               key={index}
             />
           ))}
         {!isLoading &&
           list.map((row) => (
             <Row
+              config={config}
+              data={row}
               showCheckbox={showCheckboxes}
               isSubscribed={getIsRowSubscribed(row.id)}
               isChecked={getIsRowChecked(row.id)}

@@ -1,9 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { SelectionState } from '../types';
-
-interface BasicList {
-  id: number;
-}
+import { BaseEntity, SelectionState } from '../types';
 
 const getSelectionState = (
   currentLength: number,
@@ -18,7 +14,7 @@ const getSelectionState = (
   return 'indeterminate';
 };
 
-export const useSelectionItems = <T extends BasicList>(
+export const useSelectionItems = <T extends BaseEntity>(
   list: T[],
   partialList: T[] = []
 ) => {

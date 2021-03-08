@@ -1,25 +1,14 @@
 import { FC } from 'react';
 import { useHistory } from 'react-router-dom';
 import { sportApi } from '../../api/sport';
-import {
-  DataGrid,
-  DataGridHeader,
-  DataGridFetchFn,
-} from '../../components/DataGrid';
-import { fieldConfig } from './fieldsConfig';
-
-const headers: DataGridHeader[] = fieldConfig.map(({ title }) => ({
-  node: title,
-}));
+import { DataGrid, DataGridFetchFn } from '../../components/DataGrid';
+import { gridConfig } from './gridConfig';
 
 const fetchFn: DataGridFetchFn = async ({ start, end }) => {
   const { hasMore, result } = await sportApi.fetchMatchList(start, end);
   return {
     hasMore,
-    partialList: result.map(({ id, ...rest }) => ({
-      id,
-      cells: fieldConfig.map(({ key }) => (rest as any)[key]),
-    })),
+    partialList: result,
   };
 };
 
@@ -29,5 +18,5 @@ export const MatchListPage: FC = () => {
     history.push(`/match-details/${id.join('-')}`, { isModal: true });
   };
 
-  return <DataGrid onShow={handleShow} fetchFn={fetchFn} headers={headers} />;
+  return <DataGrid onShow={handleShow} fetchFn={fetchFn} config={gridConfig} />;
 };
