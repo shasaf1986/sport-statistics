@@ -9,12 +9,19 @@ import companyLogo from './assets/logo.png';
 import { BackgroundImage } from '../BackgroundImage';
 import styeld from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import { styled } from '@material-ui/styles';
 
-const CompanyImage = styeld(BackgroundImage)({
+const Logo = styeld(BackgroundImage)({
   height: 64,
   width: 64,
   marginRight: 15,
   cursor: 'pointer',
+});
+
+const StyledToolbar = styled(Toolbar)({
+  padding: 0,
+  cursor: 'pointer',
+  userSelect: 'none',
 });
 
 export const AppBar: FC = () => {
@@ -27,14 +34,12 @@ export const AppBar: FC = () => {
   return (
     <BaseAppBar color="default" position="static">
       <Container>
-        <Toolbar
-          style={{
-            padding: 0,
-          }}
-        >
-          <CompanyImage onClick={navigateToHomePage} src={companyLogo} />
-          <Typography variant="h6">Basketball</Typography>
-        </Toolbar>
+        <StyledToolbar>
+          <Logo onClick={navigateToHomePage} src={companyLogo} />
+          <Typography onClick={navigateToHomePage} variant="h6">
+            Basketball
+          </Typography>
+        </StyledToolbar>
       </Container>
     </BaseAppBar>
   );
