@@ -3,19 +3,12 @@ import { Skeleton } from '@material-ui/lab';
 import { FC } from 'react';
 import { CheckboxCell } from './CheckboxCell';
 
-export interface DataGridSekeltonRowProps {
+export interface SekeltonRowProps {
   cellsCount: number;
 }
 
-export const DataGridSekeltonRow: FC<DataGridSekeltonRowProps> = ({
-  cellsCount,
-}) => (
-  <TableRow
-    style={{
-      userSelect: 'none',
-      cursor: 'pointer',
-    }}
-  >
+export const SekeltonRow: FC<SekeltonRowProps> = ({ cellsCount }) => (
+  <TableRow>
     <CheckboxCell />
     {Array.from({ length: cellsCount }, (_, index) => (
       <TableCell key={index}>

@@ -7,11 +7,11 @@ import {
   TableCell,
   TableRow,
 } from '@material-ui/core';
-import { DataGridSekeltonRow } from './DataGridSkeletonRow';
-import { DataGridRow } from './DataGridRow';
+import { SekeltonRow } from './SkeletonRow';
+import { Row } from './Row';
 import styled from 'styled-components';
 import { SelectionState } from '../../types';
-import { DataGridHeader, DataGridRow as DataGridRowType } from './types';
+import { DataGridHeader, DataGridRow } from './types';
 import { CheckboxCell } from './CheckboxCell';
 
 const StyledTableContainer = styled(TableContainer)({
@@ -27,7 +27,7 @@ export interface TableProps {
   selectionState: SelectionState;
   onAggregatedCheckboxClick: () => void;
   headers: DataGridHeader[];
-  list: DataGridRowType[];
+  list: DataGridRow[];
   isLoading: boolean;
   getIsRowSubscribed: (id: number) => boolean;
   getIsRowChecked: (id: number) => boolean;
@@ -62,11 +62,11 @@ export const Table: FC<TableProps> = ({
       <TableBody>
         {isLoading &&
           Array.from({ length: 10 }, (_, index) => (
-            <DataGridSekeltonRow cellsCount={headers.length} key={index} />
+            <SekeltonRow cellsCount={headers.length} key={index} />
           ))}
         {!isLoading &&
           list.map((row) => (
-            <DataGridRow
+            <Row
               isSubscribed={getIsRowSubscribed(row.id)}
               isChecked={getIsRowChecked(row.id)}
               onCheck={() => {

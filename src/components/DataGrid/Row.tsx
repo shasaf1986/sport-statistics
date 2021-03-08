@@ -1,16 +1,21 @@
 import { TableCell, TableRow } from '@material-ui/core';
 import { FC, useState } from 'react';
+import styled from 'styled-components';
 import { CheckboxCell } from './CheckboxCell';
 import { DataGridRow as DataGridRowType } from './types';
 
-export interface DataGridRowProps extends DataGridRowType {
+const StyledTableRow = styled(TableRow)({
+  cursor: 'pointer',
+});
+
+export interface RowProps extends DataGridRowType {
   onClick: () => void;
   onCheck: () => void;
   isChecked: boolean;
   isSubscribed: boolean;
 }
 
-export const DataGridRow: FC<DataGridRowProps> = ({
+export const Row: FC<RowProps> = ({
   cells,
   onClick,
   onCheck,
@@ -25,20 +30,13 @@ export const DataGridRow: FC<DataGridRowProps> = ({
   const handleMouseLeave = () => {
     setIsHovering(false);
   };
-  const handleClick = () => {
-    onClick();
-  };
 
   return (
-    <TableRow
-      onClick={handleClick}
+    <StyledTableRow
+      onClick={onClick}
       selected={isSubscribed}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      style={{
-        userSelect: 'none',
-        cursor: 'pointer',
-      }}
     >
       <CheckboxCell
         onClick={onCheck}
@@ -47,6 +45,6 @@ export const DataGridRow: FC<DataGridRowProps> = ({
       {cells.map((text, index) => (
         <TableCell key={index}>{text}</TableCell>
       ))}
-    </TableRow>
+    </StyledTableRow>
   );
 };
