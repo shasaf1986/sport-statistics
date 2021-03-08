@@ -3,7 +3,7 @@ import { FC } from 'react';
 import styled from 'styled-components';
 
 const StyledPaper = styled(Paper)({
-  minHeight: 813,
+  minHeight: 860,
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
