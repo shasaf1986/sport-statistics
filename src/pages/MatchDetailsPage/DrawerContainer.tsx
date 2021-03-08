@@ -11,6 +11,6 @@ const Container = styled.div({
 
 export const DrawerContainer: FC = ({ children }) => (
   <>
-    <Container> {children}</Container>
+    <Container>{children}</Container>
   </>
 );
