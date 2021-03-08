@@ -28,10 +28,10 @@ export interface TableProps {
   onAggregatedCheckboxClick: () => void;
   headers: DataGridHeader[];
   list: DataGridRowType[];
-  getIsRowSelected: (id: string) => boolean;
+  getIsRowSelected: (id: number) => boolean;
   isLoading: boolean;
-  getIsRowSubscribed: (id: string) => boolean;
-  getIsRowChecked: (id: string) => boolean;
+  getIsRowSubscribed: (id: number) => boolean;
+  getIsRowChecked: (id: number) => boolean;
   onRowCheck: (id: number) => void;
   onRowClick: (id: number) => void;
 }
@@ -68,8 +68,8 @@ export const Table: FC<TableProps> = ({
         {!isLoading &&
           list.map((row) => (
             <DataGridRow
-              isSubscribed={getIsRowSubscribed(row.id.toString())}
-              isChecked={getIsRowChecked(row.id.toString())}
+              isSubscribed={getIsRowSubscribed(row.id)}
+              isChecked={getIsRowChecked(row.id)}
               onCheck={() => {
                 onRowCheck(row.id);
               }}

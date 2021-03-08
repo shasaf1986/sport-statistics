@@ -53,7 +53,7 @@ export const DataGrid: FC<DataGridProps> = ({ headers, onShow, fetchFn }) => {
 
   const handleRowClick = (id: number) => {
     onShow([+id]);
-    subscribe('sport', id.toString());
+    subscribe('sport', id);
   };
 
   return (

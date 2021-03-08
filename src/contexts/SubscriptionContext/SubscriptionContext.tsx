@@ -2,11 +2,11 @@ import { createContext, FC, useCallback, useMemo, useState } from 'react';
 import { getItem, setItem } from '../../utils/storage';
 
 const storageKey = 'subscriptions';
-const buildItemPath = (path: string, id: string | number) => `${path}/${id}`;
+const buildItemPath = (path: string, id: number) => `${path}/${id}`;
 
 interface SubscriptionContextValue {
-  getIsSubscribed: (path: string, id: string) => boolean;
-  subscribe: (path: string, id: string) => void;
+  getIsSubscribed: (path: string, id: number) => boolean;
+  subscribe: (path: string, id: number) => void;
 }
 
 export const SubscriptionContext = createContext<SubscriptionContextValue>({
@@ -21,7 +21,7 @@ export const SubscriptionProvider: FC = ({ children }) => {
   console.log(subscriptions);
 
   const getIsSubscribed = useCallback(
-    (path: string, id: string) => {
+    (path: string, id: number) => {
       const itemPath = buildItemPath(path, id);
       return subscriptions[itemPath] === true;
     },
@@ -29,7 +29,7 @@ export const SubscriptionProvider: FC = ({ children }) => {
   );
 
   const subscribe = useCallback(
-    (path: string, id: string) => {
+    (path: string, id: number) => {
       const isSubscribed = getIsSubscribed(path, id);
       if (!isSubscribed) {
         const itemPath = buildItemPath(path, id);
