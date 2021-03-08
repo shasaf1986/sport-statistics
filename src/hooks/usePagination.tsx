@@ -91,7 +91,8 @@ export const usePagination = <T extends unknown>({
     return () => {
       isMounted = false;
     };
-  }, [currentPage, fetchFn, isLoading, perPage, sessionId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, isLoading, sessionId]);
 
   return useMemo(
     () => ({

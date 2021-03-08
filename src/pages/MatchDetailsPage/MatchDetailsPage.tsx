@@ -1,10 +1,11 @@
 import React, { FC, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+import { Skeleton } from '@material-ui/lab';
+import { getFormattedText } from '../../utils/textFormat';
 import { MatchDetails, MatchDetailsProps } from '../../components/MatchDetails';
 import { Pagination } from '../../components/Pagination';
 import { usePagination, UsePaginationFetchFn } from '../../hooks/usePagination';
 import { sportApi } from '../../api/sport';
-import { Skeleton } from '@material-ui/lab';
 
 export const MatchDetailsPage: FC = () => {
   const { id: paramId } = useParams<any>();
@@ -30,7 +31,7 @@ export const MatchDetailsPage: FC = () => {
         q3: matchDetails.q3,
         q4: matchDetails.q4,
         mvp: matchDetails.MVP,
-        date: matchDetails.date,
+        date: getFormattedText(matchDetails.date),
         homeTeamImage: matchDetails['Home-Picture'],
         awayTeamImage: matchDetails['Away-Picture'],
         mvpImage: matchDetails['MVP-Picture'],
@@ -54,7 +55,6 @@ export const MatchDetailsPage: FC = () => {
     fetchFn,
     perPage: 1,
   });
-  console.log(currentList);
 
   return (
     <div
@@ -80,28 +80,4 @@ export const MatchDetailsPage: FC = () => {
       />
     </div>
   );
-  // return null;
-
-  // const match = json.matches.find(({ id }) => id === matchId)!;
-  // const matchDetails = json['match-details'].find(
-  //   (a) => a['match-id'] === matchId
-  // )!;
-  // const props: MatchDetailsProps = {
-  //   homeTeam: match['home-team'],
-  //   awayTeam: match['away-team'],
-  //   awayFouls: match['away-fouls'],
-  //   homeFouls: match['home-fouls'],
-  //   q1: match.q1,
-  //   q2: match.q2,
-  //   q3: match.q3,
-  //   q4: match.q4,
-  //   mvp: match.MVP,
-  //   date: match.date,
-  //   homeTeamImage: matchDetails['Home-Picture'],
-  //   awayTeamImage: matchDetails['Away-Picture'],
-  //   mvpImage: matchDetails['MVP-Picture'],
-  //   referee: matchDetails.referee,
-  // };
-
-  // return <MatchDetails {...props} />;
 };

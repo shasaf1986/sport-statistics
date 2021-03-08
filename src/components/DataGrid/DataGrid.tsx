@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { CheckBox, Visibility } from '@material-ui/icons';
 import { DataGridRow } from './DataGridRow';
 import { Pagination } from '../Pagination';
@@ -9,6 +9,7 @@ import {
   UsePaginationFetchArgs,
   usePagination,
 } from '../../hooks/usePagination';
+import { SubscriptionContext } from '../../contexts/SubscriptionContext';
 import { CheckboxCell } from './CheckboxCell';
 import {
   Button,
@@ -53,9 +54,14 @@ export const DataGrid: FC<DataGridProps> = ({ headers, onShow, fetchFn }) => {
     toggleList,
     selectedIds,
   } = useSelectionItems(list, currentList);
+  const { subscribe, getIsSubscribed } = useContext(SubscriptionContext);
 
   const handleShow = () => {
     onShow(selectedIds.map((v) => +v));
+  };
+  const handleShowTwo = (id: number) => {
+    onShow([id]);
+    subscribe('sport', id.toString());
   };
 
   return (
@@ -116,12 +122,13 @@ export const DataGrid: FC<DataGridProps> = ({ headers, onShow, fetchFn }) => {
               {!isLoading &&
                 currentList.map((row) => (
                   <DataGridRow
+                    isSubscribed={getIsSubscribed('sport', row.id.toString())}
                     isChecked={getIsSelected(row.id)}
                     onCheck={() => {
                       toggle(row.id);
                     }}
                     onClick={() => {
-                      onShow([row.id]);
+                      handleShowTwo(row.id);
                     }}
                     key={row.id}
                     {...row}

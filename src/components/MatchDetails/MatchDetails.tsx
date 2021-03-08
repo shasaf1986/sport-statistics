@@ -5,10 +5,11 @@ import {
   ListItemAvatar,
   ListItemText,
 } from '@material-ui/core';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import { MatchHeader } from './MatchHeader';
 import { BackgroundImage } from '../../components/BackgroundImage';
+import { getFormattedText } from '../../utils/textFormat';
 
 const MvpImage = styled(BackgroundImage)({
   position: 'absolute',
@@ -51,7 +52,7 @@ export const MatchDetails: FC<MatchDetailsProps> = ({
   q4,
   awayFouls,
   homeFouls,
-  // date,
+  date,
   mvp,
   mvpImage,
   referee,
@@ -65,6 +66,12 @@ export const MatchDetails: FC<MatchDetailsProps> = ({
       awayTeamImage={awayTeamImage}
     />
     <List>
+      <ListItem>
+        <ListItemText
+          primary="Date"
+          secondary={getFormattedText(date, 'date')}
+        />
+      </ListItem>
       <ListItem>
         <ListItemText primary="Q1 score" secondary={q1} />
       </ListItem>

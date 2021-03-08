@@ -7,6 +7,7 @@ export interface DataGridRowProps extends DataGridRowType {
   onClick: () => void;
   onCheck: () => void;
   isChecked: boolean;
+  isSubscribed: boolean;
 }
 
 export const DataGridRow: FC<DataGridRowProps> = ({
@@ -14,9 +15,10 @@ export const DataGridRow: FC<DataGridRowProps> = ({
   onClick,
   onCheck,
   isChecked,
+  isSubscribed,
 }) => {
   const [isHovering, setIsHovering] = useState(false);
-
+  console.log(isHovering);
   const handleMouseEnter = () => {
     setIsHovering(true);
   };
@@ -30,7 +32,7 @@ export const DataGridRow: FC<DataGridRowProps> = ({
   return (
     <TableRow
       onClick={handleClick}
-      selected={isHovering}
+      selected={isSubscribed}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       style={{
