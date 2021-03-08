@@ -1,45 +1,34 @@
 import { FC, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { Skeleton } from '@material-ui/lab';
-import { getFormattedText } from '../../utils/textFormat';
 import { MatchDetails, MatchDetailsProps } from '../../components/MatchDetails';
 import { Pagination } from '../../components/Pagination';
 import { usePagination, UsePaginationFetchFn } from '../../hooks/usePagination';
 import { sportApi } from '../../api/sport';
+import { DrawerContainer } from './DrawerContainer';
+import { PageContainer } from './PageContainer';
 
 export const MatchDetailsPage: FC = () => {
   const { id: paramId } = useParams<any>();
+  const location = useLocation<any>();
   const ids: number[] = useMemo(
     () => paramId.split('-').map((id: any) => +id),
     [paramId]
   );
+  const isModal = location.state?.isModal === true;
+  console.log(isModal);
 
   const fetchFn: UsePaginationFetchFn<MatchDetailsProps> = async ({
     start,
     end,
   }) => {
-    const response = await sportApi.fetchMatchDetails(ids, start, end);
-
-    const partialList: MatchDetailsProps[] = response.result.map(
-      (matchDetails) => ({
-        homeTeam: matchDetails['home-team'],
-        awayTeam: matchDetails['away-team'],
-        awayFouls: matchDetails['away-fouls'],
-        homeFouls: matchDetails['home-fouls'],
-        q1: matchDetails.q1,
-        q2: matchDetails.q2,
-        q3: matchDetails.q3,
-        q4: matchDetails.q4,
-        mvp: matchDetails.MVP,
-        date: getFormattedText(matchDetails.date),
-        homeTeamImage: matchDetails['Home-Picture'],
-        awayTeamImage: matchDetails['Away-Picture'],
-        mvpImage: matchDetails['MVP-Picture'],
-        referee: matchDetails.referee,
-      })
+    const { hasMore, result: partialList } = await sportApi.fetchMatchDetails(
+      ids,
+      start,
+      end
     );
     return {
-      hasMore: response.hasMore,
+      hasMore,
       partialList,
     };
   };
@@ -56,21 +45,22 @@ export const MatchDetailsPage: FC = () => {
     perPage: 1,
   });
 
+  const ParentContainer = isModal ? DrawerContainer : PageContainer;
+
   return (
-    <div
-      style={{
-        width: 500,
-        minHeight: 700,
-      }}
-    >
+    <ParentContainer>
       <div
         style={{
-          minHeight: 700,
+          padding: 5,
         }}
       >
         {isLoading &&
-          Array.from({ length: 10 }, (_, index) => <Skeleton key={index} />)}
-        {currentList[0] && <MatchDetails {...currentList[0]} />}
+          Array.from({ length: 20 }, (_, index) => <Skeleton key={index} />)}
+        {!isLoading && (
+          <div>
+            <MatchDetails {...currentList[0]} />
+          </div>
+        )}
       </div>
       <Pagination
         hasNext={hasNext}
@@ -78,6 +68,6 @@ export const MatchDetailsPage: FC = () => {
         onPrev={goToPrevPage}
         hasPrev={hasPrev}
       />
-    </div>
+    </ParentContainer>
   );
 };

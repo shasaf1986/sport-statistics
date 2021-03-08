@@ -19,6 +19,12 @@ const MvpImage = styled(BackgroundImage)({
   backgroundPosition: 'top',
 });
 
+const StyledListItem = styled(ListItem).attrs({
+  button: true,
+})({
+  textAlign: 'center',
+});
+
 export interface MatchDetailsProps {
   date: string;
   homeTeam: string;
@@ -37,7 +43,6 @@ export interface MatchDetailsProps {
 }
 
 const Container = styled.div({
-  width: 500,
   position: 'relative',
 });
 
@@ -66,41 +71,41 @@ export const MatchDetails: FC<MatchDetailsProps> = ({
       awayTeamImage={awayTeamImage}
     />
     <List>
-      <ListItem>
+      <StyledListItem button>
         <ListItemText
           primary="Date"
           secondary={getFormattedText(date, 'date')}
         />
-      </ListItem>
-      <ListItem>
+      </StyledListItem>
+      <StyledListItem>
         <ListItemText primary="Q1 score" secondary={q1} />
-      </ListItem>
-      <ListItem>
+      </StyledListItem>
+      <StyledListItem>
         <ListItemText primary="Q2 score" secondary={q2} />
-      </ListItem>
-      <ListItem>
+      </StyledListItem>
+      <StyledListItem>
         <ListItemText primary="Q3 score" secondary={q3} />
-      </ListItem>
-      <ListItem>
+      </StyledListItem>
+      <StyledListItem>
         <ListItemText primary="Q4 score" secondary={q4} />
-      </ListItem>
-      <ListItem>
+      </StyledListItem>
+      <StyledListItem>
         <ListItemText primary="Home fouls" secondary={homeFouls} />
-      </ListItem>
-      <ListItem>
+      </StyledListItem>
+      <StyledListItem>
         <ListItemText primary="Away fouls" secondary={awayFouls} />
-      </ListItem>
-      <ListItem>
+      </StyledListItem>
+      <StyledListItem>
         <ListItemText primary="Referee" secondary={referee} />
-      </ListItem>
-      <ListItem>
+      </StyledListItem>
+      <StyledListItem>
         <ListItemAvatar>
           <Avatar>
             <MvpImage src={mvpImage} />
           </Avatar>
         </ListItemAvatar>
         <ListItemText primary="MVP" secondary={mvp} />
-      </ListItem>
+      </StyledListItem>
     </List>
   </Container>
 );
