@@ -1,45 +1,11 @@
-import React, { FC } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import { ThemeProvider as StyledThemeProvider } from 'styled-components';
+import { App } from './app';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
-import {
-  createMuiTheme,
-  CssBaseline,
-  StylesProvider,
-  ThemeProvider,
-  colors,
-} from '@material-ui/core';
-import App from './App';
-
-const theme = createMuiTheme({
-  overrides: {
-    MuiTableRow: {
-      root: {
-        '&$selected': {
-          backgroundColor: `${colors.grey[100]} !important`,
-        },
-      },
-    },
-  },
-});
-
-const Root: FC = () => (
-  <BrowserRouter>
-    <StylesProvider injectFirst>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <StyledThemeProvider theme={theme}>
-          <App />
-        </StyledThemeProvider>
-      </ThemeProvider>
-    </StylesProvider>
-  </BrowserRouter>
-);
 
 ReactDOM.render(
   <React.StrictMode>
-    <Root />
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );
