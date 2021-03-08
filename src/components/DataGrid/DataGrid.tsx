@@ -1,5 +1,4 @@
 import { FC, useContext } from 'react';
-import { CheckBox, Visibility } from '@material-ui/icons';
 import { DataGridRow } from './DataGridRow';
 import { Pagination } from '../Pagination';
 import { DataGridSekeltonRow } from './DataGridSkeletonRow';
@@ -12,7 +11,6 @@ import {
 import { SubscriptionContext } from '../../contexts/SubscriptionContext';
 import { CheckboxCell } from './CheckboxCell';
 import {
-  Button,
   Paper,
   Table,
   TableBody,
@@ -20,8 +18,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Badge,
 } from '@material-ui/core';
+import { Toolbar } from './Toolbar';
 import { useSelectionItems } from '../../hooks/useSelection';
 
 export interface DataGridFetchFnArgs extends UsePaginationFetchArgs {}
@@ -51,11 +49,13 @@ export const DataGrid: FC<DataGridProps> = ({ headers, onShow, fetchFn }) => {
     getIsSelected,
     toggle,
     partialState,
+    state,
     togglePartialList,
     toggleList,
     selectedIds,
   } = useSelectionItems(list, currentList);
   const { subscribe, getIsSubscribed } = useContext(SubscriptionContext);
+  const selectedItemsCount = selectedIds.length;
 
   const handleShow = () => {
     onShow(selectedIds.map((v) => +v));
@@ -67,34 +67,12 @@ export const DataGrid: FC<DataGridProps> = ({ headers, onShow, fetchFn }) => {
 
   return (
     <div>
-      <div
-        style={{
-          textAlign: 'right',
-        }}
-      >
-        <Button
-          onClick={handleShow}
-          variant="text"
-          color="default"
-          startIcon={<Visibility />}
-        >
-          Show all
-        </Button>
-        <Badge
-          badgeContent={selectedIds.length}
-          overlap="rectangle"
-          color="primary"
-        >
-          <Button
-            onClick={toggleList}
-            variant="text"
-            color="default"
-            startIcon={<CheckBox />}
-          >
-            Select all
-          </Button>
-        </Badge>
-      </div>
+      <Toolbar
+        onShowAllClick={handleShow}
+        onSelectAllClick={toggleList}
+        selectionState={state}
+        selectedItemsCount={selectedItemsCount}
+      />
 
       <Paper>
         <TableContainer
