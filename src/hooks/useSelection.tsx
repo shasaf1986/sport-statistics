@@ -53,7 +53,7 @@ export const useSelectionItems = <T extends BasicList>(
   }, []);
 
   const togglePartialList = useCallback(() => {
-    const shouldAdd = partialState === 'unselected';
+    const shouldAdd = partialState !== 'selected';
 
     setSelectedIdsMap((prev) => {
       const newPrev = { ...prev };
@@ -69,7 +69,7 @@ export const useSelectionItems = <T extends BasicList>(
   }, [partialState, partialList]);
 
   const toggleList = useCallback(() => {
-    const shouldAdd = state === 'unselected';
+    const shouldAdd = state !== 'selected';
 
     setSelectedIdsMap((prev) => {
       if (shouldAdd) {
