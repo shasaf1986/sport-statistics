@@ -37,43 +37,43 @@ export const useSelectionItems = <T extends BaseEntity>(
   );
 
   const toggle = useCallback((id: number) => {
-    setSelectedIdsMap((prev) => {
-      const newPrev = { ...prev };
-      if (newPrev[id]) {
-        delete newPrev[id];
+    setSelectedIdsMap((prevSelectedIdsMap) => {
+      const newSelectedIdsMap = { ...prevSelectedIdsMap };
+      if (newSelectedIdsMap[id]) {
+        delete newSelectedIdsMap[id];
       } else {
-        newPrev[id] = true;
+        newSelectedIdsMap[id] = true;
       }
-      return newPrev;
+      return newSelectedIdsMap;
     });
   }, []);
 
   const togglePartialList = useCallback(() => {
     const shouldAdd = partialState !== 'selected';
 
-    setSelectedIdsMap((prev) => {
-      const newPrev = { ...prev };
+    setSelectedIdsMap((prevSelectedIdsMap) => {
+      const newSelectedIdsMap = { ...prevSelectedIdsMap };
       partialList.forEach(({ id }) => {
         if (shouldAdd) {
-          newPrev[id] = true;
+          newSelectedIdsMap[id] = true;
         } else {
-          delete newPrev[id];
+          delete newSelectedIdsMap[id];
         }
       });
-      return newPrev;
+      return newSelectedIdsMap;
     });
   }, [partialState, partialList]);
 
   const toggleList = useCallback(() => {
     const shouldAdd = state !== 'selected';
 
-    setSelectedIdsMap((prev) => {
+    setSelectedIdsMap((prevSelectedIdsMap) => {
       if (shouldAdd) {
-        const newPrev = { ...prev };
+        const newSelectedIdsMap = { ...prevSelectedIdsMap };
         list.forEach(({ id }) => {
-          newPrev[id] = true;
+          newSelectedIdsMap[id] = true;
         });
-        return newPrev;
+        return newSelectedIdsMap;
       }
       return {};
     });

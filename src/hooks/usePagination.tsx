@@ -63,7 +63,7 @@ export const usePagination = <T extends unknown>({
     setHasMore(false);
     setCurrentPage(0);
     setAggregatedList([]);
-    setSessionId((prev) => prev + 1);
+    setSessionId((prevSessionId) => prevSessionId + 1);
   }, []);
 
   useEffect(() => {
@@ -78,8 +78,8 @@ export const usePagination = <T extends unknown>({
       if (!isMounted) {
         return;
       }
-      setAggregatedList((prev) => {
-        const newAggregateList = [...prev];
+      setAggregatedList((prevAggregatedList) => {
+        const newAggregateList = [...prevAggregatedList];
         newAggregateList[currentPage] = result.partialList;
 
         return newAggregateList;

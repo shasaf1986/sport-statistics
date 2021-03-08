@@ -3,7 +3,7 @@ import { ListItemProps, ListItem } from './ListItem';
 import { MatchHeader } from './MatchHeader';
 import { getFormattedText } from '../../utils/textFormat';
 import styled from 'styled-components';
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
 export interface MatchDetailsProps {
   date: string;
@@ -42,10 +42,11 @@ export const MatchDetails: FC<MatchDetailsProps> = ({
   mvpImage,
   referee,
 }) => {
+  const formattedDate = useMemo(() => getFormattedText(date, 'date'), [date]);
   const items: ListItemProps[] = [
     {
       description: 'Date',
-      value: getFormattedText(date, 'date'),
+      value: formattedDate,
     },
     {
       description: 'Q1 score',
