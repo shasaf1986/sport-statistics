@@ -1,5 +1,5 @@
 import { Drawer as MuiDrawer } from '@material-ui/core';
-import React, { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ExitAnimationDetector } from './ExitAnimationDetector';
 

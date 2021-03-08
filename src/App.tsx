@@ -1,16 +1,16 @@
 import { Routes } from './routes';
-import { Container } from '@material-ui/core';
+import { Layout } from './components/Layout';
 import { BrowserRouter } from 'react-router-dom';
 import { SubscriptionProvider } from './contexts/SubscriptionContext';
 
 export default function BasicTable() {
   return (
     <SubscriptionProvider>
-      <Container>
-        <BrowserRouter>
+      <BrowserRouter>
+        <Layout>
           <Routes />
-        </BrowserRouter>
-      </Container>
+        </Layout>
+      </BrowserRouter>
     </SubscriptionProvider>
   );
 }

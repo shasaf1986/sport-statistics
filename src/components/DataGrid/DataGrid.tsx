@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import { FC, useContext } from 'react';
 import { CheckBox, Visibility } from '@material-ui/icons';
 import { DataGridRow } from './DataGridRow';
 import { Pagination } from '../Pagination';

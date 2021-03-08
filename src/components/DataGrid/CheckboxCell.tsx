@@ -4,7 +4,7 @@ import {
 } from '@material-ui/core';
 import { IndeterminateCheckBox as IndeterminateCheckBoxIcon } from '@material-ui/icons';
 import styled from 'styled-components';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { SelectionState } from '../../types';
 
 interface ContainerProps {

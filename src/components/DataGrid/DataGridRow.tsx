@@ -1,5 +1,5 @@
 import { TableCell, TableRow } from '@material-ui/core';
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { CheckboxCell } from './CheckboxCell';
 import { DataGridRow as DataGridRowType } from './types';
 

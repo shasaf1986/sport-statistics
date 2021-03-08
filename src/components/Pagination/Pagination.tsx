@@ -3,7 +3,7 @@ import {
   NavigateNext as NavigateNextIcon,
   NavigateBefore as NavigateBeforeIcon,
 } from '@material-ui/icons';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 interface PaginationProps {
   onNext: () => void;

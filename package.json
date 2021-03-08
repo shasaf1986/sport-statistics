@@ -36,7 +36,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "type-check": "tsc --noEmit",
     "lint:ci": "eslint --ext js,ts,tsx src",
+    "postlint:ci": "yarn type-check",
     "lint": "yarn lint:ci --fix"
   },
   "eslintConfig": {

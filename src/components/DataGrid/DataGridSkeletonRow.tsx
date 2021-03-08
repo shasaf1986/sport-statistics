@@ -1,6 +1,6 @@
 import { TableCell, TableRow } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { CheckboxCell } from './CheckboxCell';
 
 export interface DataGridSekeltonRowProps {
