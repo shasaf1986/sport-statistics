@@ -27,7 +27,11 @@ const routeConfigs: RouteConfig[] = [
   },
 ];
 
-export const Routes: FC = () => {
+interface RoutesProps {
+  layout: FC;
+}
+
+export const Routes: FC<RoutesProps> = ({ layout: Layout }) => {
   const location = useLocation<any>();
   const prevLocationRef = useRef(location);
   const isFirstTimeRef = useRef(true);
@@ -40,39 +44,38 @@ export const Routes: FC = () => {
   if (!isModal) {
     prevLocationRef.current = location;
   }
-  console.log(location.state);
-  console.log(isModal);
-  // console.log(location);
-  // console.log(isModal);
+  const primaryLocation = isModal ? prevLocationRef.current : location;
 
   return (
-    <>
-      <Switch location={isModal ? prevLocationRef.current : location}>
-        {routeConfigs.map(
-          (
-            {
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              canBeModal,
-              ...routeProps
-            },
-            index
-          ) => (
-            <Route key={index} {...routeProps} />
-          )
-        )}
-        <Route exact path="/">
-          <MatchListPage />
-        </Route>
-      </Switch>
-      {isModal &&
-        routeConfigs
-          .filter(({ canBeModal }) => canBeModal)
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          .map(({ canBeModal, children, ...routeProps }, index) => (
-            <Route key={index} {...routeProps}>
-              <Drawer>{children}</Drawer>
-            </Route>
-          ))}
-    </>
+    <Route location={primaryLocation}>
+      <Layout>
+        <Switch location={primaryLocation}>
+          {routeConfigs.map(
+            (
+              {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                canBeModal,
+                ...routeProps
+              },
+              index
+            ) => (
+              <Route key={index} {...routeProps} />
+            )
+          )}
+          <Route exact path="/">
+            <MatchListPage />
+          </Route>
+        </Switch>
+        {isModal &&
+          routeConfigs
+            .filter(({ canBeModal }) => canBeModal)
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            .map(({ canBeModal, children, ...routeProps }, index) => (
+              <Route location={location} key={index} {...routeProps}>
+                <Drawer>{children}</Drawer>
+              </Route>
+            ))}
+      </Layout>
+    </Route>
   );
 };

@@ -7,9 +7,7 @@ export default function BasicTable() {
   return (
     <SubscriptionProvider>
       <BrowserRouter>
-        <Layout>
-          <Routes />
-        </Layout>
+        <Routes layout={Layout} />
       </BrowserRouter>
     </SubscriptionProvider>
   );
