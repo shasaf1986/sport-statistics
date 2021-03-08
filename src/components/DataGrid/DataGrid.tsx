@@ -20,6 +20,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Badge,
 } from '@material-ui/core';
 import { useSelectionItems } from '../../hooks/useSelection';
 
@@ -79,19 +80,26 @@ export const DataGrid: FC<DataGridProps> = ({ headers, onShow, fetchFn }) => {
         >
           Show all
         </Button>
-        <Button
-          onClick={toggleList}
-          variant="text"
-          color="default"
-          startIcon={<CheckBox />}
+        <Badge
+          badgeContent={selectedIds.length}
+          overlap="rectangle"
+          color="primary"
         >
-          Select all
-        </Button>
+          <Button
+            onClick={toggleList}
+            variant="text"
+            color="default"
+            startIcon={<CheckBox />}
+          >
+            Select all
+          </Button>
+        </Badge>
       </div>
 
       <Paper>
         <TableContainer
           style={{
+            userSelect: 'none',
             height: 600,
           }}
         >
