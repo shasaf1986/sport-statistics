@@ -28,7 +28,6 @@ export interface TableProps {
   onAggregatedCheckboxClick: () => void;
   headers: DataGridHeader[];
   list: DataGridRowType[];
-  getIsRowSelected: (id: number) => boolean;
   isLoading: boolean;
   getIsRowSubscribed: (id: number) => boolean;
   getIsRowChecked: (id: number) => boolean;

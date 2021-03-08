@@ -1,31 +1,26 @@
 import { FC, useContext } from 'react';
 import { Pagination } from '../Pagination';
-import { DataGridHeader, DataGridRow as DataGridRowType } from './types';
-import {
-  UsePaginationFetchResult,
-  UsePaginationFetchArgs,
-  usePagination,
-} from '../../hooks/usePagination';
+import { DataGridFetchFn, DataGridHeader } from './types';
+import { usePagination } from '../../hooks/usePagination';
 import { SubscriptionContext } from '../../contexts/SubscriptionContext';
 import { Paper } from '@material-ui/core';
 import { Table } from './Table';
 import { Toolbar } from './Toolbar';
 import { useSelectionItems } from '../../hooks/useSelection';
 
-export interface DataGridFetchFnArgs extends UsePaginationFetchArgs {}
-export interface DataGridFetchFnResult
-  extends UsePaginationFetchResult<DataGridRowType> {}
-
-export type DataGridFetchFn = (
-  args: DataGridFetchFnArgs
-) => Promise<DataGridFetchFnResult>;
 export interface DataGridProps {
   headers: DataGridHeader[];
   fetchFn: DataGridFetchFn;
   onShow: (id: number[]) => void;
+  subscriptionKey?: string;
 }
 
-export const DataGrid: FC<DataGridProps> = ({ headers, onShow, fetchFn }) => {
+export const DataGrid: FC<DataGridProps> = ({
+  headers,
+  onShow,
+  fetchFn,
+  subscriptionKey = 'basketball',
+}) => {
   const {
     currentList,
     hasNext,
@@ -52,8 +47,8 @@ export const DataGrid: FC<DataGridProps> = ({ headers, onShow, fetchFn }) => {
   };
 
   const handleRowClick = (id: number) => {
-    onShow([+id]);
-    subscribe('sport', id);
+    onShow([id]);
+    subscribe(subscriptionKey, id);
   };
 
   return (
@@ -73,9 +68,8 @@ export const DataGrid: FC<DataGridProps> = ({ headers, onShow, fetchFn }) => {
           onRowCheck={toggle}
           onAggregatedCheckboxClick={togglePartialList}
           onRowClick={handleRowClick}
-          getIsRowChecked={(id) => getIsSelected(+id)}
-          getIsRowSelected={(id) => getIsSelected(+id)}
-          getIsRowSubscribed={(id) => getIsSubscribed('sport', id)}
+          getIsRowChecked={getIsSelected}
+          getIsRowSubscribed={(id) => getIsSubscribed(subscriptionKey, id)}
         />
         <Pagination
           hasNext={hasNext}
