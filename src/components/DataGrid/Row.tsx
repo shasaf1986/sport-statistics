@@ -13,6 +13,7 @@ export interface RowProps extends DataGridRowType {
   onCheck: () => void;
   isChecked: boolean;
   isSubscribed: boolean;
+  showCheckbox: boolean;
 }
 
 export const Row: FC<RowProps> = ({
@@ -21,9 +22,9 @@ export const Row: FC<RowProps> = ({
   onCheck,
   isChecked,
   isSubscribed,
+  showCheckbox,
 }) => {
   const [isHovering, setIsHovering] = useState(false);
-  console.log(isHovering);
   const handleMouseEnter = () => {
     setIsHovering(true);
   };
@@ -39,6 +40,7 @@ export const Row: FC<RowProps> = ({
       onMouseLeave={handleMouseLeave}
     >
       <CheckboxCell
+        isVisible={showCheckbox || isHovering}
         onClick={onCheck}
         state={isChecked ? 'selected' : 'unselected'}
       />

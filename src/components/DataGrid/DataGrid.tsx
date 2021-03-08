@@ -1,4 +1,4 @@
-import { FC, useContext } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { Pagination } from '../Pagination';
 import { DataGridFetchFn, DataGridHeader } from './types';
 import { usePagination } from '../../hooks/usePagination';
@@ -39,6 +39,7 @@ export const DataGrid: FC<DataGridProps> = ({
     toggleList,
     selectedIds,
   } = useSelectionItems(list, currentList);
+  const [showCheckboxes, setShowCheckboxes] = useState(false);
   const { subscribe, getIsSubscribed } = useContext(SubscriptionContext);
   const selectedItemsCount = selectedIds.length;
 
@@ -51,9 +52,16 @@ export const DataGrid: FC<DataGridProps> = ({
     subscribe(subscriptionKey, id);
   };
 
+  useEffect(() => {
+    if (selectedItemsCount > 0) {
+      setShowCheckboxes(true);
+    }
+  }, [selectedItemsCount]);
+
   return (
     <div>
       <Toolbar
+        isVisible={!showCheckboxes}
         onShowAllClick={handleShow}
         onSelectAllClick={toggleList}
         selectionState={state}
@@ -61,6 +69,7 @@ export const DataGrid: FC<DataGridProps> = ({
       />
       <Paper>
         <Table
+          showCheckboxes={showCheckboxes}
           list={currentList}
           headers={headers}
           isLoading={isLoading}

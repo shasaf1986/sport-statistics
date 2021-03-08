@@ -5,11 +5,15 @@ import { CheckboxCell } from './CheckboxCell';
 
 export interface SekeltonRowProps {
   cellsCount: number;
+  showChecbox: boolean;
 }
 
-export const SekeltonRow: FC<SekeltonRowProps> = ({ cellsCount }) => (
+export const SekeltonRow: FC<SekeltonRowProps> = ({
+  cellsCount,
+  showChecbox,
+}) => (
   <TableRow>
-    <CheckboxCell />
+    <CheckboxCell isDisabled={true} isVisible={showChecbox} />
     {Array.from({ length: cellsCount }, (_, index) => (
       <TableCell key={index}>
         <Skeleton />

@@ -5,23 +5,30 @@ import { Visibility } from '@material-ui/icons';
 import { SelectAllButton } from './SelectAllButton';
 import { SelectionState } from '../../types';
 
-const Container = styled.div({
+interface ContainerProps {
+  isVisible: boolean;
+}
+
+const Container = styled.div<ContainerProps>(({ isVisible }) => ({
+  visibility: isVisible ? 'hidden' : undefined,
   textAlign: 'right',
-});
+}));
 
 export interface ToolbarProps {
   selectionState: SelectionState;
   selectedItemsCount: number;
   onSelectAllClick: () => void;
   onShowAllClick: () => void;
+  isVisible: boolean;
 }
 export const Toolbar: FC<ToolbarProps> = ({
   selectedItemsCount,
   selectionState,
   onSelectAllClick,
   onShowAllClick,
+  isVisible,
 }) => (
-  <Container>
+  <Container isVisible={isVisible}>
     <SelectAllButton
       selectedItemsCount={selectedItemsCount}
       state={selectionState}

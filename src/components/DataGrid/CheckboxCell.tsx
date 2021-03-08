@@ -18,7 +18,6 @@ const Container = styled(MuiTableCell).withConfig({
   width: 1,
   opacity: isVisible ? 1 : 0,
   paddingRight: 0,
-  pointerEvents: isVisible ? undefined : 'none',
 }));
 
 const Checkbox = styled(MuiCheckbox)({
@@ -28,6 +27,7 @@ const Checkbox = styled(MuiCheckbox)({
 export interface CheckboxCellProps {
   state?: SelectionState;
   onClick?: () => void;
+  isDisabled?: boolean;
   isVisible?: boolean;
 }
 
@@ -35,17 +35,21 @@ export const CheckboxCell: FC<CheckboxCellProps> = ({
   state = 'unselected',
   onClick,
   isVisible = true,
+  isDisabled = false,
 }) => (
   <Container
     isVisible={isVisible}
     onClick={(event) => {
-      event.stopPropagation();
-      if (onClick) {
-        onClick();
+      if (isVisible && !isDisabled) {
+        event.stopPropagation();
+        if (onClick) {
+          onClick();
+        }
       }
     }}
   >
     <Checkbox
+      disabled={!isVisible || isDisabled}
       color="primary"
       checked={state === 'selected'}
       indeterminateIcon={<IndeterminateCheckBoxIcon color="primary" />}

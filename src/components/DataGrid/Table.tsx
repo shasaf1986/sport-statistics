@@ -33,6 +33,7 @@ export interface TableProps {
   getIsRowChecked: (id: number) => boolean;
   onRowCheck: (id: number) => void;
   onRowClick: (id: number) => void;
+  showCheckboxes: boolean;
 }
 
 export const Table: FC<TableProps> = ({
@@ -45,12 +46,15 @@ export const Table: FC<TableProps> = ({
   getIsRowChecked,
   onRowCheck,
   onRowClick,
+  showCheckboxes,
 }) => (
   <StyledTableContainer>
     <MuiTable size="small">
       <StyledTableHead>
         <TableRow>
           <CheckboxCell
+            isVisible={showCheckboxes}
+            isDisabled={isLoading}
             state={selectionState}
             onClick={onAggregatedCheckboxClick}
           />
@@ -62,11 +66,16 @@ export const Table: FC<TableProps> = ({
       <TableBody>
         {isLoading &&
           Array.from({ length: 10 }, (_, index) => (
-            <SekeltonRow cellsCount={headers.length} key={index} />
+            <SekeltonRow
+              showChecbox={showCheckboxes}
+              cellsCount={headers.length}
+              key={index}
+            />
           ))}
         {!isLoading &&
           list.map((row) => (
             <Row
+              showCheckbox={showCheckboxes}
               isSubscribed={getIsRowSubscribed(row.id)}
               isChecked={getIsRowChecked(row.id)}
               onCheck={() => {
