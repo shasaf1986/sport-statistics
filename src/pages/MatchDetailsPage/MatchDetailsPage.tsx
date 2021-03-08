@@ -1,12 +1,17 @@
 import { FC, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { Skeleton } from '@material-ui/lab';
+import styled from 'styled-components';
 import { MatchDetails, MatchDetailsProps } from '../../components/MatchDetails';
 import { Pagination } from '../../components/Pagination';
 import { usePagination, UsePaginationFetchFn } from '../../hooks/usePagination';
 import { sportApi } from '../../api/sport';
 import { DrawerContainer } from './DrawerContainer';
 import { PageContainer } from './PageContainer';
+import { GenericSkeleton } from '../../components/GenericSkeleton';
+
+const ContentContainer = styled.div({
+  padding: 5,
+});
 
 export const MatchDetailsPage: FC = () => {
   const { id: paramId } = useParams<any>();
@@ -15,8 +20,8 @@ export const MatchDetailsPage: FC = () => {
     () => paramId.split('-').map((id: any) => +id),
     [paramId]
   );
+
   const isModal = location.state?.isModal === true;
-  console.log(isModal);
 
   const fetchFn: UsePaginationFetchFn<MatchDetailsProps> = async ({
     start,
@@ -49,19 +54,9 @@ export const MatchDetailsPage: FC = () => {
 
   return (
     <ParentContainer>
-      <div
-        style={{
-          padding: 5,
-        }}
-      >
-        {isLoading &&
-          Array.from({ length: 20 }, (_, index) => <Skeleton key={index} />)}
-        {!isLoading && (
-          <div>
-            <MatchDetails {...currentList[0]} />
-          </div>
-        )}
-      </div>
+      <ContentContainer>
+        {isLoading ? <GenericSkeleton /> : <MatchDetails {...currentList[0]} />}
+      </ContentContainer>
       <Pagination
         hasNext={hasNext}
         onNext={goToNextPage}
