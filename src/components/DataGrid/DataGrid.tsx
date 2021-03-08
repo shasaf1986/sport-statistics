@@ -43,13 +43,15 @@ export const DataGrid: FC<DataGridProps> = ({
   const { subscribe, getIsSubscribed } = useContext(SubscriptionContext);
   const selectedItemsCount = selectedIds.length;
 
-  const handleShow = () => {
-    onShow(selectedIds.map((v) => +v));
+  const handleShow = (ids: number[]) => {
+    subscribe(subscriptionKey, ids);
+    onShow(ids);
   };
-
+  const handleShowAll = () => {
+    handleShow(selectedIds);
+  };
   const handleRowClick = (id: number) => {
-    onShow([id]);
-    subscribe(subscriptionKey, id);
+    handleShow([id]);
   };
 
   useEffect(() => {
@@ -62,7 +64,7 @@ export const DataGrid: FC<DataGridProps> = ({
     <div>
       <Toolbar
         isVisible={!showCheckboxes}
-        onShowAllClick={handleShow}
+        onShowAllClick={handleShowAll}
         onSelectAllClick={toggleList}
         selectionState={state}
         selectedItemsCount={selectedItemsCount}

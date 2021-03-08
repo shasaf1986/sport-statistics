@@ -25,9 +25,10 @@ export const useSelectionItems = <T extends BasicList>(
   const [selectedIdsMap, setSelectedIdsMap] = useState<
     Record<string, boolean | undefined>
   >({});
-  const selectedIds = useMemo(() => Object.keys(selectedIdsMap), [
-    selectedIdsMap,
-  ]);
+  const selectedIds = useMemo(
+    () => Object.keys(selectedIdsMap).map((id) => +id),
+    [selectedIdsMap]
+  );
   const partialSelectedIds = useMemo(
     () => partialList.filter(({ id }) => selectedIdsMap[id] === true),
     [partialList, selectedIdsMap]

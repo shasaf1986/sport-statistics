@@ -6,7 +6,7 @@ const buildItemPath = (path: string, id: number) => `${path}/${id}`;
 
 interface SubscriptionContextValue {
   getIsSubscribed: (path: string, id: number) => boolean;
-  subscribe: (path: string, id: number) => void;
+  subscribe: (path: string, id: number | number[]) => void;
 }
 
 export const SubscriptionContext = createContext<SubscriptionContextValue>({
@@ -18,7 +18,6 @@ export const SubscriptionProvider: FC = ({ children }) => {
   const [subscriptions, setSubscriptions] = useState<Record<string, boolean>>(
     () => getItem(storageKey) || {}
   );
-  console.log(subscriptions);
 
   const getIsSubscribed = useCallback(
     (path: string, id: number) => {
@@ -29,16 +28,24 @@ export const SubscriptionProvider: FC = ({ children }) => {
   );
 
   const subscribe = useCallback(
-    (path: string, id: number) => {
-      const isSubscribed = getIsSubscribed(path, id);
-      if (!isSubscribed) {
-        const itemPath = buildItemPath(path, id);
-        const newSubscriptions = {
-          ...getItem(storageKey),
-          [itemPath]: true,
-        };
-        setItem(storageKey, newSubscriptions);
-        setSubscriptions(newSubscriptions);
+    (path: string, id: number | number[]) => {
+      const ids = Array.isArray(id) ? id : [id];
+      const newIds = ids.filter(
+        (newId) => getIsSubscribed(path, newId) === false
+      );
+
+      if (newIds.length > 0) {
+        const storageItem = getItem(storageKey);
+        const updatedStorageItem = newIds.reduce((acc, newId) => {
+          const itemPath = buildItemPath(path, newId);
+          return {
+            ...acc,
+            [itemPath]: true,
+          };
+        }, storageItem);
+
+        setItem(storageKey, updatedStorageItem);
+        setSubscriptions(updatedStorageItem);
       }
     },
     [getIsSubscribed]
