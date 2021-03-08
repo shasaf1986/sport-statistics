@@ -8,10 +8,21 @@ import {
   CssBaseline,
   StylesProvider,
   ThemeProvider,
+  colors,
 } from '@material-ui/core';
 import App from './App';
 
-const theme = createMuiTheme();
+const theme = createMuiTheme({
+  overrides: {
+    MuiTableRow: {
+      root: {
+        '&$selected': {
+          backgroundColor: `${colors.grey[100]} !important`,
+        },
+      },
+    },
+  },
+});
 
 const Root: FC = () => (
   <BrowserRouter>
