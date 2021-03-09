@@ -35,6 +35,7 @@ export const SubscriptionProvider: FC = ({ children }) => {
       );
 
       if (newIds.length > 0) {
+        // it based on storage data in order to avoid conflicts between tabs
         const storageItem = getItem(storageKey);
         const updatedStorageItem = newIds.reduce((acc, newId) => {
           const itemPath = buildItemPath(path, newId);
