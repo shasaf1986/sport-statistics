@@ -11,12 +11,15 @@ export interface RoutesProps {
 export const Routes: FC<RoutesProps> = ({ layout: Layout }) => {
   const location = useLocation<any>();
   const prevLocationRef = useRef(location);
-  const isFirstTimeRef = useRef(true);
-  if (isFirstTimeRef.current) {
-    delete location.state;
-    isFirstTimeRef.current = false;
-  }
+  const isFirstRenderRef = useRef(true);
 
+  if (isFirstRenderRef.current) {
+    // this a hack
+    // somehow the browser preserves the state after refresh, unlike copy to a new tab
+    delete location.state;
+    isFirstRenderRef.current = false;
+  }
+  // or a drawer in our case
   const isModal = location.state?.isModal === true;
   if (!isModal) {
     prevLocationRef.current = location;

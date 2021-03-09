@@ -24,6 +24,7 @@ export const usePagination = <T extends unknown>({
   fetchFn,
   perPage = 10,
 }: UserPaginationOptions<T>) => {
+  // sessionId will trigger fetch (on reset)
   const [sessionId, setSessionId] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [aggregatedList, setAggregatedList] = useState<T[][]>([]);
@@ -39,7 +40,7 @@ export const usePagination = <T extends unknown>({
   const hasNext = !isLoading && (currentPage + 1 < totalPages || hasMore);
   const hasPrev = !isLoading && currentPage > 0;
   const currentList = aggregatedList[currentPage];
-
+  // this should be used internally only
   const goToPage = useCallback(
     (destPage: number) => {
       if (!aggregatedList[destPage]) {
@@ -91,6 +92,8 @@ export const usePagination = <T extends unknown>({
     return () => {
       isMounted = false;
     };
+    // by design fetchFn and perPage are not part of dep list
+    // it could lead to unexpected behavior
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, isLoading, sessionId]);
 

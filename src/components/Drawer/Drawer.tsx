@@ -16,7 +16,8 @@ export const Drawer: FC = ({ children }) => {
       isMountedRef.current = false;
     };
   }, []);
-
+  // in order to go back when the animation of drawer is ended
+  // otherwise this component will be unmounted immediately
   const handleAnimationEnd = () => {
     if (isMountedRef.current) {
       history.goBack();
