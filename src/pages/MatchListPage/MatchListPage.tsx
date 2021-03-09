@@ -4,8 +4,8 @@ import { sportApi } from '../../api/sport';
 import { DataGrid, DataGridFetchFn } from '../../components/DataGrid';
 import { gridConfig } from './gridConfig';
 
-const fetchFn: DataGridFetchFn = async ({ start, end }) => {
-  const { hasMore, result } = await sportApi.fetchMatchList(start, end);
+const fetchFn: DataGridFetchFn = async ({ start, end, sortBy }) => {
+  const { hasMore, result } = await sportApi.fetchMatchList(start, end, sortBy);
   return {
     hasMore,
     partialList: result,

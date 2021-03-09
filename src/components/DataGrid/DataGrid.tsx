@@ -8,6 +8,7 @@ import { Table } from './Table';
 import { Toolbar } from './Toolbar';
 import { useSelectedItems } from '../../hooks/useSelectedItems';
 import { BaseEntity, SortedState } from '../../types';
+import { UsePaginationFetchArgs } from '../../hooks/usePagination';
 
 export interface DataGridProps<T> {
   config: DataGridConfig;
@@ -18,14 +19,23 @@ export interface DataGridProps<T> {
 
 export const DataGrid = <T extends BaseEntity>({
   onShow,
-  fetchFn,
+  fetchFn: innerFechFn,
   subscriptionKey = 'basketball',
   config,
 }: DataGridProps<T>) => {
   const [sortedFields, setSortedFields] = useState<Record<string, SortedState>>(
     {}
   );
-  console.log(sortedFields, setSortedFields);
+  const fetchFn = (args: UsePaginationFetchArgs) => {
+    const sortBy = Object.keys(sortedFields).map((key) => ({
+      key,
+      state: sortedFields[key],
+    }));
+    return innerFechFn({
+      ...args,
+      sortBy,
+    });
+  };
   const {
     currentList,
     hasNext,
@@ -34,6 +44,7 @@ export const DataGrid = <T extends BaseEntity>({
     hasPrev,
     isLoading,
     list,
+    reset: resetPagination,
   } = usePagination({ fetchFn });
   const {
     getIsSelected,
@@ -43,6 +54,7 @@ export const DataGrid = <T extends BaseEntity>({
     togglePartialList,
     toggleList,
     selectedIds,
+    reset: resetSelectedItems,
   } = useSelectedItems(list, currentList);
   const [showCheckboxes, setShowCheckboxes] = useState(false);
   const { subscribe, getIsSubscribed } = useContext(SubscriptionContext);
@@ -59,6 +71,8 @@ export const DataGrid = <T extends BaseEntity>({
     handleShow([id]);
   };
   const handleSortChange = (key: string) => {
+    resetPagination();
+    resetSelectedItems();
     setSortedFields((prevSortedField) => ({
       ...prevSortedField,
       [key]: prevSortedField[key] === 'asc' ? 'desc' : 'asc',
