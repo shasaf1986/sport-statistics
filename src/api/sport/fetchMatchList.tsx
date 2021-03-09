@@ -10,7 +10,7 @@ export const fetchMatchList = async (
   await delay(1000);
 
   const sortedList = [...mockData.matches];
-
+  // very basic sorting ...
   sortBy.forEach(({ key, state }) => {
     if (state) {
       sortedList.sort((fieldA, fieldB) => {

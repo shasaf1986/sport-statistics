@@ -18,5 +18,12 @@ export const MatchListPage: FC = () => {
     history.push(`/match-details/${id.join('-')}`, { isModal: true });
   };
 
-  return <DataGrid onShow={handleShow} fetchFn={fetchFn} config={gridConfig} />;
+  return (
+    <DataGrid
+      onShow={handleShow}
+      subscriptionKey="matchList"
+      fetchFn={fetchFn}
+      config={gridConfig}
+    />
+  );
 };

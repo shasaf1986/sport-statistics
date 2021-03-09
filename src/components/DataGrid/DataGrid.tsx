@@ -14,13 +14,13 @@ export interface DataGridProps<T> {
   config: DataGridConfig;
   fetchFn: DataGridFetchFn<T>;
   onShow: (id: number[]) => void;
-  subscriptionKey?: string;
+  subscriptionKey: string;
 }
 
 export const DataGrid = <T extends BaseEntity>({
   onShow,
   fetchFn: innerFechFn,
-  subscriptionKey = 'basketball',
+  subscriptionKey,
   config,
 }: DataGridProps<T>) => {
   const [sortedFields, setSortedFields] = useState<Record<string, SortedState>>(
@@ -80,6 +80,9 @@ export const DataGrid = <T extends BaseEntity>({
   };
 
   useEffect(() => {
+    // it keeps the checkboxes open for the first time
+    // when there is at least one selected item
+    // using selectedItemsCount only will lead to weird behaviors
     if (selectedItemsCount > 0) {
       setShowCheckboxes(true);
     }
