@@ -1,7 +1,7 @@
 import { FC, useMemo } from 'react';
 import { Container, Typography } from '@material-ui/core';
 import styled from 'styled-components';
-import { AppBar } from '../AppBar';
+import { NavBar } from '../NavBar';
 import { useLocation } from 'react-router-dom';
 
 const PageContainer = styled(Container)({
@@ -23,7 +23,7 @@ export const Layout: FC = ({ children }) => {
 
   return (
     <>
-      <AppBar />
+      <NavBar />
       <PageContainer>
         <>
           <PageHeader variant="h4">{pageName}</PageHeader>

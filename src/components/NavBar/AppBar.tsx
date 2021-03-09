@@ -24,7 +24,7 @@ const StyledToolbar = styled(Toolbar)({
   userSelect: 'none',
 });
 
-export const AppBar: FC = () => {
+export const NavBar: FC = () => {
   const history = useHistory();
 
   const navigateToHomePage = () => {
