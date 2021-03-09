@@ -5,7 +5,7 @@ import {
 import { IndeterminateCheckBox as IndeterminateCheckBoxIcon } from '@material-ui/icons';
 import styled from 'styled-components';
 import { FC } from 'react';
-import { SelectionState } from '../../types';
+import { SelectedState } from '../../types';
 
 interface ContainerProps {
   isVisible: boolean;
@@ -25,7 +25,7 @@ const Checkbox = styled(MuiCheckbox)({
 });
 
 export interface CheckboxCellProps {
-  state?: SelectionState;
+  state?: SelectedState;
   onClick?: () => void;
   isDisabled?: boolean;
   isVisible?: boolean;

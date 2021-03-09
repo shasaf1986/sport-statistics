@@ -5,9 +5,9 @@ import {
   CheckBoxOutlineBlankOutlined,
   IndeterminateCheckBox,
 } from '@material-ui/icons';
-import { SelectionState } from '../../types';
+import { SelectedState } from '../../types';
 
-const getIcon = (state: SelectionState) => {
+const getIcon = (state: SelectedState) => {
   switch (state) {
     case 'selected': {
       return CheckBox;
@@ -22,7 +22,7 @@ const getIcon = (state: SelectionState) => {
 };
 
 interface SelectAllButtonProps {
-  state: SelectionState;
+  state: SelectedState;
   onClick: () => void;
   selectedItemsCount: number;
 }

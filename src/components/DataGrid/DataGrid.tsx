@@ -6,7 +6,7 @@ import { SubscriptionContext } from '../../contexts/SubscriptionContext';
 import { Paper } from '@material-ui/core';
 import { Table } from './Table';
 import { Toolbar } from './Toolbar';
-import { useSelectionItems } from '../../hooks/useSelection';
+import { useSelectedItems } from '../../hooks/useSelectedItems';
 import { BaseEntity } from '../../types';
 
 export interface DataGridProps<T> {
@@ -39,7 +39,7 @@ export const DataGrid = <T extends BaseEntity>({
     togglePartialList,
     toggleList,
     selectedIds,
-  } = useSelectionItems(list, currentList);
+  } = useSelectedItems(list, currentList);
   const [showCheckboxes, setShowCheckboxes] = useState(false);
   const { subscribe, getIsSubscribed } = useContext(SubscriptionContext);
   const selectedItemsCount = selectedIds.length;
@@ -67,7 +67,7 @@ export const DataGrid = <T extends BaseEntity>({
         isVisible={!showCheckboxes}
         onShowAllClick={handleShowAll}
         onSelectAllClick={toggleList}
-        selectionState={state}
+        selectedState={state}
         selectedItemsCount={selectedItemsCount}
       />
       <Paper>
@@ -76,7 +76,7 @@ export const DataGrid = <T extends BaseEntity>({
           list={currentList}
           config={config}
           isLoading={isLoading}
-          selectionState={partialState}
+          selectedState={partialState}
           onRowCheck={toggle}
           onAggregatedCheckboxClick={togglePartialList}
           onRowClick={handleRowClick}

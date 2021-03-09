@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { Button } from '@material-ui/core';
 import { Visibility } from '@material-ui/icons';
 import { SelectAllButton } from './SelectAllButton';
-import { SelectionState } from '../../types';
+import { SelectedState } from '../../types';
 
 interface ContainerProps {
   isVisible: boolean;
@@ -15,7 +15,7 @@ const Container = styled.div<ContainerProps>(({ isVisible }) => ({
 }));
 
 export interface ToolbarProps {
-  selectionState: SelectionState;
+  selectedState: SelectedState;
   selectedItemsCount: number;
   onSelectAllClick: () => void;
   onShowAllClick: () => void;
@@ -23,7 +23,7 @@ export interface ToolbarProps {
 }
 export const Toolbar: FC<ToolbarProps> = ({
   selectedItemsCount,
-  selectionState,
+  selectedState,
   onSelectAllClick,
   onShowAllClick,
   isVisible,
@@ -31,7 +31,7 @@ export const Toolbar: FC<ToolbarProps> = ({
   <Container isVisible={isVisible}>
     <SelectAllButton
       selectedItemsCount={selectedItemsCount}
-      state={selectionState}
+      state={selectedState}
       onClick={onSelectAllClick}
     />
     <Button

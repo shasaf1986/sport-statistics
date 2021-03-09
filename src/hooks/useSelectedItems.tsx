@@ -1,10 +1,10 @@
 import { useCallback, useMemo, useState } from 'react';
-import { BaseEntity, SelectionState } from '../types';
+import { BaseEntity, SelectedState } from '../types';
 
-const getSelectionState = (
+const getSelectedState = (
   currentLength: number,
   totalLength: number
-): SelectionState => {
+): SelectedState => {
   if (currentLength === 0) {
     return 'unselected';
   }
@@ -14,7 +14,7 @@ const getSelectionState = (
   return 'indeterminate';
 };
 
-export const useSelectionItems = <T extends BaseEntity>(
+export const useSelectedItems = <T extends BaseEntity>(
   list: T[],
   partialList: T[] = []
 ) => {
@@ -30,8 +30,8 @@ export const useSelectionItems = <T extends BaseEntity>(
     [partialList, selectedIdsMap]
   );
 
-  const state = getSelectionState(selectedIds.length, list.length);
-  const partialState = getSelectionState(
+  const state = getSelectedState(selectedIds.length, list.length);
+  const partialState = getSelectedState(
     partialSelectedIds.length,
     partialList.length
   );

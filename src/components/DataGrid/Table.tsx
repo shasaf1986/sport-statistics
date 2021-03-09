@@ -9,7 +9,7 @@ import {
 import { SekeltonRow } from './SkeletonRow';
 import { Row } from './Row';
 import styled from 'styled-components';
-import { BaseEntity, SelectionState } from '../../types';
+import { BaseEntity, SelectedState } from '../../types';
 import { DataGridConfig } from './types';
 import { CheckboxCell } from './CheckboxCell';
 
@@ -23,7 +23,7 @@ const StyledTableHead = styled(TableHead)({
 });
 
 export interface TableProps<T> {
-  selectionState: SelectionState;
+  selectedState: SelectedState;
   onAggregatedCheckboxClick: () => void;
   config: DataGridConfig;
   list: T[];
@@ -36,7 +36,7 @@ export interface TableProps<T> {
 }
 
 export const Table = <T extends BaseEntity>({
-  selectionState,
+  selectedState,
   onAggregatedCheckboxClick,
   config,
   isLoading,
@@ -54,7 +54,7 @@ export const Table = <T extends BaseEntity>({
           <CheckboxCell
             isVisible={showCheckboxes}
             isDisabled={isLoading}
-            state={selectionState}
+            state={selectedState}
             onClick={onAggregatedCheckboxClick}
           />
           {config.map(({ textHeader, key }) => (
