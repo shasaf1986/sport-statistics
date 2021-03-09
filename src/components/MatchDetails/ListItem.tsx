@@ -6,7 +6,7 @@ import {
   ListItemText,
   Avatar,
 } from '@material-ui/core';
-import { BackgroundImage } from '../BackgroundImage';
+import { Image } from '../Image';
 
 const Container = styled(MuiListItem).attrs({
   button: false as true,
@@ -20,7 +20,7 @@ const StyledListItemText = styled(ListItemText)({
   flex: 'none',
 });
 
-const StyledBackgroundImage = styled(BackgroundImage)({
+const StyledImage = styled(Image)({
   position: 'absolute',
   width: '100%',
   height: '100%',
@@ -44,7 +44,7 @@ export const ListItem: FC<ListItemProps> = ({ description, value, image }) => (
     {image && (
       <ListItemAvatar>
         <StyledAvatar>
-          <StyledBackgroundImage src={image} />
+          <StyledImage src={image} />
         </StyledAvatar>
       </ListItemAvatar>
     )}

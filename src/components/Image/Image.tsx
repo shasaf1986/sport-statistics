@@ -1,17 +1,13 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 
-interface backgroundImageProps {
+interface ImageProps {
   src: string;
   className?: string;
   onClick?: () => void;
 }
 
-export const BackgroundImage: FC<backgroundImageProps> = ({
-  className,
-  src,
-  onClick,
-}) => (
+export const Image: FC<ImageProps> = ({ className, src, onClick }) => (
   <Container
     onClick={onClick}
     style={{

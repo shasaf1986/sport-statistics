@@ -6,12 +6,12 @@ import {
   Typography,
 } from '@material-ui/core';
 import companyLogo from './assets/logo.png';
-import { BackgroundImage } from '../BackgroundImage';
+import { Image } from '../Image';
 import styeld from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { styled } from '@material-ui/styles';
 
-const Logo = styeld(BackgroundImage)({
+const Logo = styeld(Image)({
   height: 64,
   width: 64,
   marginRight: 15,

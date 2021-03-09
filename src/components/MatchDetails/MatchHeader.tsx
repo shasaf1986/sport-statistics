@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 import { Typography } from '@material-ui/core';
-import { BackgroundImage } from '../BackgroundImage';
+import { Image } from '../Image';
 
 export interface MatchDetailsProps {
   homeTeam: string;
@@ -26,7 +26,7 @@ const FinalResultContainer = styled.div({
   flex: 1,
 });
 
-const TeamImage = styled(BackgroundImage)({
+const TeamImage = styled(Image)({
   width: 70,
   height: 70,
   margin: '0 auto',
