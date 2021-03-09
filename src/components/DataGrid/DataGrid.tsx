@@ -7,7 +7,7 @@ import { Paper } from '@material-ui/core';
 import { Table } from './Table';
 import { Toolbar } from './Toolbar';
 import { useSelectedItems } from '../../hooks/useSelectedItems';
-import { BaseEntity } from '../../types';
+import { BaseEntity, SortedState } from '../../types';
 
 export interface DataGridProps<T> {
   config: DataGridConfig;
@@ -22,6 +22,10 @@ export const DataGrid = <T extends BaseEntity>({
   subscriptionKey = 'basketball',
   config,
 }: DataGridProps<T>) => {
+  const [sortedFields, setSortedFields] = useState<Record<string, SortedState>>(
+    {}
+  );
+  console.log(sortedFields, setSortedFields);
   const {
     currentList,
     hasNext,
@@ -54,6 +58,12 @@ export const DataGrid = <T extends BaseEntity>({
   const handleRowClick = (id: number) => {
     handleShow([id]);
   };
+  const handleSortChange = (key: string) => {
+    setSortedFields((prevSortedField) => ({
+      ...prevSortedField,
+      [key]: prevSortedField[key] === 'asc' ? 'desc' : 'asc',
+    }));
+  };
 
   useEffect(() => {
     if (selectedItemsCount > 0) {
@@ -72,6 +82,8 @@ export const DataGrid = <T extends BaseEntity>({
       />
       <Paper>
         <Table
+          sortedFields={sortedFields}
+          onSortChange={handleSortChange}
           showCheckboxes={showCheckboxes}
           list={currentList}
           config={config}

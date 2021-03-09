@@ -5,11 +5,12 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  TableSortLabel,
 } from '@material-ui/core';
 import { SekeltonRow } from './SkeletonRow';
 import { Row } from './Row';
 import styled from 'styled-components';
-import { BaseEntity, SelectedState } from '../../types';
+import { BaseEntity, SelectedState, SortedState } from '../../types';
 import { DataGridConfig } from './types';
 import { CheckboxCell } from './CheckboxCell';
 
@@ -19,7 +20,7 @@ const StyledTableContainer = styled(TableContainer)({
 });
 
 const StyledTableHead = styled(TableHead)({
-  whiteSpace: 'nowrap',
+  // whiteSpace: 'nowrap',
 });
 
 export interface TableProps<T> {
@@ -33,6 +34,8 @@ export interface TableProps<T> {
   onRowCheck: (id: number) => void;
   onRowClick: (id: number) => void;
   showCheckboxes: boolean;
+  onSortChange: (key: string) => void;
+  sortedFields: Record<string, SortedState>;
 }
 
 export const Table = <T extends BaseEntity>({
@@ -46,6 +49,8 @@ export const Table = <T extends BaseEntity>({
   onRowCheck,
   onRowClick,
   showCheckboxes,
+  onSortChange,
+  sortedFields,
 }: TableProps<T>) => (
   <StyledTableContainer>
     <MuiTable size="small">
@@ -58,7 +63,19 @@ export const Table = <T extends BaseEntity>({
             onClick={onAggregatedCheckboxClick}
           />
           {config.map(({ textHeader, key }) => (
-            <TableCell key={key}>{textHeader}</TableCell>
+            <TableCell
+              onClick={() => {
+                onSortChange(key);
+              }}
+              key={key}
+            >
+              <TableSortLabel
+                active={!!sortedFields[key]}
+                direction={sortedFields[key]}
+              >
+                {textHeader}
+              </TableSortLabel>
+            </TableCell>
           ))}
         </TableRow>
       </StyledTableHead>
