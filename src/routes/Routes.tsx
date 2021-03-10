@@ -1,6 +1,5 @@
 import { FC, useRef } from 'react';
 import { Switch, Route, useLocation } from 'react-router-dom';
-import { MatchListPage } from '../pages/MatchListPage';
 import { Drawer } from '../components/Drawer/Drawer';
 import { routeConfigs } from './routeConfigs';
 
@@ -29,7 +28,7 @@ export const Routes: FC<RoutesProps> = ({ layout: Layout }) => {
   return (
     <Route location={primaryLocation}>
       <Layout>
-        <Switch location={primaryLocation}>
+        <Switch>
           {routeConfigs.map(
             (
               {
@@ -42,19 +41,19 @@ export const Routes: FC<RoutesProps> = ({ layout: Layout }) => {
               <Route key={index} {...routeProps} />
             )
           )}
-          <Route exact path="/">
-            <MatchListPage />
-          </Route>
         </Switch>
-        {isModal &&
-          routeConfigs
-            .filter(({ canBeModal }) => canBeModal)
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            .map(({ canBeModal, children, ...routeProps }, index) => (
-              <Route location={location} key={index} {...routeProps}>
-                <Drawer>{children}</Drawer>
-              </Route>
-            ))}
+        {isModal && (
+          <Switch location={location}>
+            {routeConfigs
+              .filter(({ canBeModal }) => canBeModal)
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              .map(({ canBeModal, children, ...routeProps }, index) => (
+                <Route key={index} {...routeProps}>
+                  <Drawer>{children}</Drawer>
+                </Route>
+              ))}
+          </Switch>
+        )}
       </Layout>
     </Route>
   );
