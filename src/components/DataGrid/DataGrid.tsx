@@ -91,6 +91,7 @@ export const DataGrid = <T extends BaseEntity>({
   return (
     <div>
       <Toolbar
+        totalItemsCount={list.length}
         isVisible={!showCheckboxes}
         onShowAllClick={handleShowAll}
         onSelectAllClick={toggleList}

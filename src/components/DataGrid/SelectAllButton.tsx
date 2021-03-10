@@ -25,12 +25,14 @@ interface SelectAllButtonProps {
   state: SelectedState;
   onClick: () => void;
   selectedItemsCount: number;
+  isDisabled: boolean;
 }
 
 export const SelectAllButton: FC<SelectAllButtonProps> = ({
   onClick,
   selectedItemsCount,
   state,
+  isDisabled,
 }) => {
   const Icon = getIcon(state);
 
@@ -41,6 +43,7 @@ export const SelectAllButton: FC<SelectAllButtonProps> = ({
       color="primary"
     >
       <Button
+        disabled={isDisabled}
         onClick={onClick}
         variant="text"
         color="default"

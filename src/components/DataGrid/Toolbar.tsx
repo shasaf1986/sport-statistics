@@ -17,6 +17,7 @@ const Container = styled.div<ContainerProps>(({ isVisible }) => ({
 export interface ToolbarProps {
   selectedState: SelectedState;
   selectedItemsCount: number;
+  totalItemsCount: number;
   onSelectAllClick: () => void;
   onShowAllClick: () => void;
   isVisible: boolean;
@@ -27,9 +28,11 @@ export const Toolbar: FC<ToolbarProps> = ({
   onSelectAllClick,
   onShowAllClick,
   isVisible,
+  totalItemsCount,
 }) => (
   <Container isVisible={isVisible}>
     <SelectAllButton
+      isDisabled={totalItemsCount === 0}
       selectedItemsCount={selectedItemsCount}
       state={selectedState}
       onClick={onSelectAllClick}

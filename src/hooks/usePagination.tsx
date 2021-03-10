@@ -10,10 +10,9 @@ export interface UsePaginationFetchArgs {
   end: number;
 }
 
-export type UsePaginationFetchFn<T> = (args: {
-  start: number;
-  end: number;
-}) => Promise<UsePaginationFetchResult<T>>;
+export type UsePaginationFetchFn<T> = (
+  args: UsePaginationFetchArgs
+) => Promise<UsePaginationFetchResult<T>>;
 
 export interface UserPaginationOptions<T> {
   fetchFn: UsePaginationFetchFn<T>;
